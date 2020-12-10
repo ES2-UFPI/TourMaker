@@ -1,21 +1,54 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
-export default function App() {
+import React from 'react';
+import { StatusBar } from 'react-native';
+
+import CustomHeader from './Header.js';
+import HomeScreen from './Screens/HomeScreen.js';
+import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
+import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
+import RotaScren from './Screens/RotaScren.js';
+
+
+
+const Stack = createStackNavigator();
+
+const StackOptionDefault = ({ navigation, route })=> ({
+  headerTitle: props => <CustomHeader navigation={navigation} route={route} {...props}/>,
+  headerStyle: {
+    backgroundColor: '#1abc9c',
+  },
+})
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="RoteiroAutomatico"
+          component={RoteiroAutomaticoScreen}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="RoteiroManual"
+          component={RoteiroManualScreen}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="Rota"
+          component={RotaScren}
+          options={StackOptionDefault}
+        />
+      </Stack.Navigator>
+      <StatusBar style={{backgroundColor: '#161A31'}}/>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
