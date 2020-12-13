@@ -5,7 +5,7 @@ import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 
 import CustomButton from './ScreensModules/CustomButton';
 
-
+import CustomMapView from "./ScreensModules/CustomMapView";
 import ReactMaps from '../APIs/ReactMaps'
 
 /*
@@ -26,7 +26,7 @@ class RoteiroManualScreen extends Component{
             tipoPDI: " ",
             PDI:" ",
             listaPDI:[],
-            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Entretenimento", "Outros"],
+            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Entretenimento", "Outros"], //Placeholder
             listaPDIselecao:[],
             tableHead: ["Parada", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
             tableData: []
@@ -35,6 +35,7 @@ class RoteiroManualScreen extends Component{
     }
     deleteStop(index) { 
         var itemReadd
+        console.log(index)
         var a = this.state.listaPDI.filter( (item, b) => {
             if(b === index){
                 itemReadd = item
@@ -90,7 +91,7 @@ class RoteiroManualScreen extends Component{
         }
 
         const element = (data, index) => (
-            <TouchableOpacity onPress={() => this.deleteStop(data,index)}>
+            <TouchableOpacity onPress={() => this.deleteStop(index)}>
               <View style={styles.btn}>
                 <Text style={styles.btnText}>Excluir</Text>
               </View>
@@ -98,10 +99,13 @@ class RoteiroManualScreen extends Component{
           );
         
         return(
+
+            
             
             <View style={styles.RoteiroManualScreen}>
-                <Text>Tela do Roteiro Manual</Text>
-                <Text>Barra de Pesquisa (A implementar)</Text>
+                
+                <Text>Criar Novo Roteiro</Text>
+                <Text>Escolha pra Onde quer ir e Tenha a Melhor Rota</Text>
                 <Picker
                     selectedValue={this.state.tipoPDI}
                     style={{ height: 50, width: 200 }}
@@ -116,7 +120,7 @@ class RoteiroManualScreen extends Component{
                 </Picker>
 
                 <Picker
-                    selectedValue={this.state.PDI}
+                    selectedValue={"Opções"}
                     style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) =>{
                         var a = itemValue
@@ -130,7 +134,7 @@ class RoteiroManualScreen extends Component{
                         return (<Picker.Item value = {item} label={item} key = {item}/>)
                     })}
                 </Picker>
-                
+                <CustomMapView style = {{height: 200}}/>
 
                 <View style={styles.container}>
                     <Table borderStyle={{ borderColor: 'transparent' }}>
@@ -147,6 +151,7 @@ class RoteiroManualScreen extends Component{
                             ))
                         }
                     </Table>
+                    
                 </View>
                 
                 <CustomButton
