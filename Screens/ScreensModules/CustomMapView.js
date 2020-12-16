@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, PermissionsAndroid} from 'react-native';
 import MapView from 'react-native-maps'
 import Permissions from '../../APIs/Permissions'
+import ReactMaps from '../../APIs/ReactMaps'
 class CustomMapView extends Component{
     state ={
         region: null,
@@ -24,9 +25,9 @@ class CustomMapView extends Component{
                 }
             })
         }
+
     }
     callbackPermissionLocation = (status) => {
-        console.log(status)
         if(status != "granted"){
             alert("Permissão de localização não foi concedida!")
         }
@@ -36,9 +37,9 @@ class CustomMapView extends Component{
             )
         }
     }
+    
     componentDidMount(){
-
-        Permissions.verifyLocationPermission(this.callbackPermissionLocation)
+        Permissions.verifyLocationPermission(this.callbackPermissionLocation)           
     }
     render(){
         return(
@@ -51,6 +52,7 @@ class CustomMapView extends Component{
                 showsUserLocation={this.state.userLocationPermission}
                 followsUserLocation={this.state.userLocationPermission}
                 ></MapView>
+                
             </View>
         )
     }
