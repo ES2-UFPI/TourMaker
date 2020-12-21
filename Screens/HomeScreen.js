@@ -36,6 +36,13 @@ class HomeScreen extends Component{
                         this.props.navigation.navigate('RoteiroManual', paramsRoteiroManual)
                     }}
                 />
+                <CustomButton
+                    title="Pontos de interesse proximos"
+                    color={styles.Buttons.color}
+                    onPress={()=>{
+                        this.props.navigation.navigate('SelecaoPDI', paramsRoteiroManual)
+                    }}
+                />
             </View>
         )
     }

@@ -10,6 +10,7 @@ import HomeScreen from './Screens/HomeScreen.js';
 import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
 import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
 import RotaScren from './Screens/RotaScren.js';
+import SelecaoInteresseScreen from './Screens/SelecaoInteresseScreen'
 
 
 
@@ -44,6 +45,11 @@ function App() {
         <Stack.Screen
           name="Rota"
           component={RotaScren}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="SelecaoPDI"
+          component={SelecaoInteresseScreen}
           options={StackOptionDefault}
         />
       </Stack.Navigator>
