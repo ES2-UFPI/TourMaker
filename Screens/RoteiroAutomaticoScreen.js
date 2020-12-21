@@ -80,17 +80,6 @@ class RoteiroAutomaticoScreen extends Component{
                     })}
                 </Picker>
 
-                <Picker
-                    selectedValue={"Opções"}
-                    style={{ height: 50, width: 200 }}
-                    onValueChange={(itemValue, itemIndex) =>{
-                        var a = itemValue
-                        this.state.listaPDI.push(a)
-                        this.tableHandle(a)
-                        this.controlRepet(a)
-                     }
-                    }>
-                </Picker>
                 <CustomMapView style = {{height: 200}}/>
 
                 <View style={styles.container}>
