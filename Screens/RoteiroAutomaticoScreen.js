@@ -29,7 +29,7 @@ class RoteiroAutomaticoScreen extends Component{
                     title="Aceitar Roteiro Automatico"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('Rota', paramsRota)
+                        this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
             </View>
