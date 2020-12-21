@@ -9,7 +9,7 @@ import CustomHeader from './Header.js';
 import HomeScreen from './Screens/HomeScreen.js';
 import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
 import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
-import RotaScren from './Screens/RotaScren.js';
+import ControleRoteiroScreen from './Screens/ControleRoteiroScreen.js';
 
 
 
@@ -42,8 +42,8 @@ function App() {
           options={StackOptionDefault}
         />
         <Stack.Screen
-          name="Rota"
-          component={RotaScren}
+          name="GerenciamentoRoteiro"
+          component={ControleRoteiroScreen}
           options={StackOptionDefault}
         />
       </Stack.Navigator>

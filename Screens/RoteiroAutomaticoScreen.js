@@ -104,7 +104,7 @@ class RoteiroAutomaticoScreen extends Component{
                     title="Criar Roteiro Automático"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('Rota', paramsRota)
+                        this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
             </View>
