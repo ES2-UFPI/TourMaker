@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, Input, TouchableOpacity } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import {Picker} from '@react-native-picker/picker';
 
@@ -24,8 +24,7 @@ class RoteiroAutomaticoScreen extends Component{
             tipoPDI: " ",
             PDI:" ",
             listaPDI:[],
-            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Entretenimento", "Outros"], //Separar a categoria dos PDIs minerados, a ser feito
-            listaPDIselecao:[],
+            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             tableHead: ["Parada", 'Excluir'],//atualizar com os dados dos PDIs mineredos
             tableData: []
 
@@ -33,35 +32,103 @@ class RoteiroAutomaticoScreen extends Component{
     }
 
     searchPDI(tipoPDI){
-        // a fazer: procurar dentro do mapa as pdis proximos do tipo escolhido e mostrar no mapa
-        var placeholderListaPDI = ["lugar mágico","lugar legal","etc"];
-        this.state.listaPDIselecao= placeholderListaPDI;
+
+        var a
+        switch (tipoPDI) {
+            case "Alimentação":
+                a = "restaurant" //trocar para food se possivel
+                break;
+
+            case "Compras":
+                a = "store"
+                break;
+
+            case "Hospedagem":
+                a = "lodging"
+                break;
+
+            case "Parque de Diversões":
+                a = "amusement_park"
+                break;
+            
+            case "Galeria de Arte":
+                a = "art_gallery"
+                break;
+
+            case "Biblioteca":
+                a = "library"
+                break;
+            
+            case "Atração Turistica":
+                a = "tourist_attraction"
+                break;
+            case "Zoologico":
+                a = "zoo"
+                break;
+            case "Museu":
+                a = "museum"
+                break;
+            case "Cinema":
+                a = "movie_theater"
+                break;
+            case "Spa":
+                a = "spa"
+                break;
+            case "Estádio":
+                a = "stadium"
+                break;
+            case "Parque":
+                a = "park"
+                break;
+        }
+        ReactMaps.getLocationByType(a,(result)=> {
+            var listaPDI = result.filter((element,index) => {return index < 5})
+            this.setState({listaPDI: listaPDI});
+            listaPDI.forEach((item) => {
+                this.tableHandle(item)
+            })
+        })
+        
     }
 
     tableHandle(data){
         var tableData = this.state.tableData
-        tableData.push([data," "])//atualizar campos com dados dos PDIs mineredos
+        tableData.push([data.placeName," "])//atualizar campos com dados dos PDIs mineredos
         this.setState({
             tableData: tableData
         })
     }
 
-    controlRepet(data){
-        var a = this.state.listaPDIselecao.filter( item => {
-            return item !== data
+    deleteStop(index) { 
+        var itemReadd
+        var a = this.state.listaPDI.filter( (item, b) => {
+            if(b === index){
+                itemReadd = item
+            }
+            return b !== index
         })
         this.setState({
-            listaPDIselecao: a
+            listaPDI: a
+        })
+
+        a = this.state.tableData.filter((item, b) => {
+            return b !== index
+        })
+        this.setState({
+            tableData: a
         })
     }
 
     render(){
-
-        console.log(this.props.route.params)
-        const paramsRota = {
-            listaPDI: this.state.listaPDI
-        }
         
+        const element = (data, index) => (
+            <TouchableOpacity onPress={() => this.deleteStop(index)}>
+              <View style={styles.btn}>
+                <Text style={styles.btnText}>Excluir</Text>
+              </View>
+            </TouchableOpacity>
+          );
+
         return(
             <View style={styles.RoteiroAutomaticoScreen}>
                 
@@ -72,7 +139,7 @@ class RoteiroAutomaticoScreen extends Component{
                     style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) =>
                         {this.setState({ tipoPDI: itemValue }),
-                        this.searchPDI( this.state.tipoPDI ) }
+                        this.searchPDI( itemValue ) }
                     }>
                     <Picker.Item label= "Tipo"/>
                     {this.state.tiposPDI.map((item, index) => {
@@ -104,6 +171,11 @@ class RoteiroAutomaticoScreen extends Component{
                     title="Criar Roteiro Automático"
                     color={styles.Buttons.color}
                     onPress={()=>{
+                        const paramsRota = {
+                            listaPDI: this.state.listaPDI
+                        }
+                        console.log(this.state.listaPDI)
+                        //console.log(paramsRota)
                         this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
