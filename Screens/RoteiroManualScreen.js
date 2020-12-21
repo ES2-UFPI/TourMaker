@@ -17,25 +17,28 @@ import ReactMaps from '../APIs/ReactMaps'
         paramsRoteiroManual
 */
 
-
-
 class RoteiroManualScreen extends Component{
     constructor(props) {
         super(props);
+        var table = []
+        if (props.route.params.listaPDI != undefined){
+            props.route.params.listaPDI.forEach(element => {
+                table.push([element.placeName,element.rating," "])
+            });
+        }
         this.state = {
             tipoPDI: " ",
             PDI:" ",
-            listaPDI:[],
-            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Entretenimento", "Outros"], //Placeholder
+            listaPDI:props.route.params.listaPDI === undefined ? []:props.route.params.listaPDI,
+            tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             listaPDIselecao:[],
-            tableHead: ["Parada", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
-            tableData: []
+            tableHead: ["Parada", "Funcionamento", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
+            tableData: table
 
-        };
+        };    
     }
     deleteStop(index) { 
         var itemReadd
-        console.log(index)
         var a = this.state.listaPDI.filter( (item, b) => {
             if(b === index){
                 itemReadd = item
@@ -62,14 +65,65 @@ class RoteiroManualScreen extends Component{
 
 
     searchPDI(tipoPDI){
-        // TO DO: procurar dentro do mapa as pdis proximos do tipo escolhido e colocar em listaPDI
-        var placeholderListaPDI = ["Restaurante1","Restaurante2","Bar4","Bar5"];
-        this.state.listaPDIselecao= placeholderListaPDI;
+
+        var a
+        switch (tipoPDI) {
+            case "Alimentação":
+                a = "restaurant" //trocar para food se possivel
+                break;
+
+            case "Compras":
+                a = "store"
+                break;
+
+            case "Hospedagem":
+                a = "lodging"
+                break;
+
+            case "Parque de Diversões":
+                a = "amusement_park"
+                break;
+            
+            case "Galeria de Arte":
+                a = "art_gallery"
+                break;
+
+            case "Biblioteca":
+                a = "library"
+                break;
+            
+            case "Atração Turistica":
+                a = "tourist_attraction"
+                break;
+            case "Zoologico":
+                a = "zoo"
+                break;
+            case "Museu":
+                a = "museum"
+                break;
+            case "Cinema":
+                a = "movie_theater"
+                break;
+            case "Spa":
+                a = "spa"
+                break;
+            case "Estádio":
+                a = "stadium"
+                break;
+            case "Parque":
+                a = "park"
+                break;
+        }
+        ReactMaps.getLocationByType(a,(result)=> {
+            this.setState({listaPDIselecao: result});
+        })
+        
     }
 
     tableHandle(data){
         var tableData = this.state.tableData
-        tableData.push([data," "])//atualizar campos com dados dos PDIs mineredos
+        //var open = data.opening_hours.open_now ? "Aberto":"Fechado"
+        tableData.push([data.placeName,"placeholder"," "])//atualizar campos com dados dos PDIs minerados
         this.setState({
             tableData: tableData
         })
@@ -82,6 +136,10 @@ class RoteiroManualScreen extends Component{
         this.setState({
             listaPDIselecao: a
         })
+    }
+
+    componentDidMount(){
+        console.log(this.props.route.params)
     }
     
     render(){
@@ -100,8 +158,6 @@ class RoteiroManualScreen extends Component{
         
         return(
 
-            
-            
             <View style={styles.RoteiroManualScreen}>
                 
                 <Text>Criar Novo Roteiro</Text>
@@ -111,7 +167,7 @@ class RoteiroManualScreen extends Component{
                     style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) =>
                         {this.setState({ tipoPDI: itemValue }),
-                        this.searchPDI( this.state.tipoPDI ) }
+                        this.searchPDI( itemValue ) }
                     }>
                     <Picker.Item label= "Tipo"/>
                     {this.state.tiposPDI.map((item, index) => {
@@ -122,7 +178,7 @@ class RoteiroManualScreen extends Component{
                 <Picker
                     selectedValue={"Opções"}
                     style={{ height: 50, width: 200 }}
-                    onValueChange={(itemValue, itemIndex) =>{
+                    onValueChange={(itemValue) =>{
                         var a = itemValue
                         this.state.listaPDI.push(a)
                         this.tableHandle(a)
@@ -130,11 +186,11 @@ class RoteiroManualScreen extends Component{
                      }
                     }>
                     <Picker.Item label= "Selecione Locais"/>
-                    {this.state.listaPDIselecao.map((item, index) => {
-                        return (<Picker.Item value = {item} label={item} key = {item}/>)
+                    {this.state.listaPDIselecao.map((item) => {
+                        return (<Picker.Item value = {item} label={item.placeName} key = {item.placeId}/>)
                     })}
                 </Picker>
-                <CustomMapView style = {{height: 200}}/>
+                <CustomMapView style = {{height: 200}} markers={this.state.listaPDI}/>
 
                 <View style={styles.container}>
                     <Table borderStyle={{ borderColor: 'transparent' }}>
@@ -144,7 +200,7 @@ class RoteiroManualScreen extends Component{
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellIndex === 1 ? element(cellData, index) : cellData} textStyle={styles.text}/>
+                                            <Cell key={cellIndex} data={cellIndex === 2 ? element(cellData, index) : cellData} textStyle={styles.text}/>
                                         ))
                                     }
                                 </TableWrapper>
@@ -158,7 +214,7 @@ class RoteiroManualScreen extends Component{
                     title="Criar Roteiro"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('Rota', paramsRota)
+                        this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
             </View>
@@ -188,3 +244,34 @@ const styles = StyleSheet.create({
     btnText: { textAlign: 'center', color: '#fff' } 
   });
 export default RoteiroManualScreen;
+
+/*
+            "business_status" : "OPERATIONAL",
+            "formatted_address" : "Av. Min. Petrônio Portela, 1436-1508, Esperantina - PI, 64180-000, Brazil",
+            "geometry" : {
+            "location" : {
+                "lat" : -3.8884028,
+                "lng" : -42.2364677
+            },
+            "viewport" : {
+                "northeast" : {
+                    "lat" : -3.887052020107278,
+                    "lng" : -42.23513127010728
+                },
+                "southwest" : {
+                    "lat" : -3.889751679892722,
+                    "lng" : -42.23783092989272
+                }
+            }
+            },
+            "name" : "Pastelaria Grande Pastel",
+            "opening_hours" : {
+            "open_now" : false
+            },
+            "place_id" : "ChIJZQjdgwq4kgcRp7AEa-RHDkQ",
+            "rating" : 4.4,
+            "reference" : "ChIJZQjdgwq4kgcRp7AEa-RHDkQ",
+            "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
+            "user_ratings_total" : 57
+*/
+        
