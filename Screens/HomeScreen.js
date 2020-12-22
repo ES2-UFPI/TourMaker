@@ -12,14 +12,11 @@ import ReactMaps from '../APIs/ReactMaps'
 */
 
 class HomeScreen extends Component{
-
-    componentDidMount() {
-        ReactMaps.getNearbyLocation(-5.052383,-42.790102,200, (result) => {
-            this.setState({
-                listaPDI: result
-            })
-        })
+    state = {
+        listaPDI:[],
+        UserLocation: null
     }
+
 
     state = {
         listaPDI: []
@@ -36,7 +33,16 @@ class HomeScreen extends Component{
 
         return(
             <View style={styles.Home}>
-                <CustomMapView markers={this.state.listaPDI}/>
+                <CustomMapView
+                    markers={this.state.listaPDI}
+                    useUserLocation={(location)=>{
+                        ReactMaps.getNearbyLocation(location.latitude, location.longitude, 200, (result) => {
+                            this.setState({
+                                listaPDI: result
+                            })
+                        })
+                    }}
+                />
                 <CustomButton
                     title="Criar Roteiro Automatico"
                     color={styles.Buttons.color}
