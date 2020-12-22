@@ -174,8 +174,6 @@ class RoteiroAutomaticoScreen extends Component{
                         const paramsRota = {
                             listaPDI: this.state.listaPDI
                         }
-                        console.log(this.state.listaPDI)
-                        //console.log(paramsRota)
                         this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
                     }}
                 />

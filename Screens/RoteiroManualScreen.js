@@ -137,10 +137,6 @@ class RoteiroManualScreen extends Component{
             listaPDIselecao: a
         })
     }
-
-    componentDidMount(){
-        console.log(this.props.route.params)
-    }
     
     render(){
         

@@ -1,12 +1,22 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, PermissionsAndroid} from 'react-native';
-import MapView from 'react-native-maps'
+import { StyleSheet, View} from 'react-native';
+import MapView, { Marker } from 'react-native-maps'
 import Permissions from '../../APIs/Permissions'
-import ReactMaps from '../../APIs/ReactMaps'
+
 class CustomMapView extends Component{
-    state ={
-        region: null,
-        userLocationPermission: false
+    constructor(props){
+        super(props)
+        var height = 400
+        if(props.style !== undefined){
+            height = props.style.height
+        }
+        var markers = props.markers !== undefined ? props.markers : []
+        this.state ={
+            mapHeight: height,
+            markers: markers,
+            region: null,
+            userLocationPermission: false
+        }
     }
 
     onRegionChange = (region) => {
@@ -14,6 +24,13 @@ class CustomMapView extends Component{
     }
     onUserLocationChange = (location) => {
         let UserCoords = location.nativeEvent.coordinate
+        var locationAntigo = null
+        if(this.state.region !== null){
+            locationAntigo = {
+                latitude: this.state.region.latitude,
+                longitude: this.state.region.longitude,
+            }
+        }
         if(!this.state.userFlag){
             this.setState({
                 userFlag: true,
@@ -25,7 +42,19 @@ class CustomMapView extends Component{
                 }
             })
         }
-
+        var variLatitude = 1, variLongitude = 1
+        if(this.state.region !== null){
+            variLatitude = (UserCoords.latitude - locationAntigo.latitude)
+            variLatitude = variLatitude >= 0 ? variLatitude : -variLatitude
+            variLongitude = (UserCoords.longitude - locationAntigo.longitude)
+            variLongitude = variLongitude >= 0 ? variLongitude : -variLongitude
+        }
+        if(this.props.useUserLocation !== undefined && variLatitude > 0.0001 && variLongitude > 0.0001){
+            this.props.useUserLocation({
+                latitude: UserCoords.latitude,
+                longitude: UserCoords.longitude,
+            })
+        }
     }
     callbackPermissionLocation = (status) => {
         if(status != "granted"){
@@ -42,8 +71,17 @@ class CustomMapView extends Component{
         Permissions.verifyLocationPermission(this.callbackPermissionLocation)           
     }
     render(){
+        const style = StyleSheet.create({
+            CustomMapView: {
+              backgroundColor: 'yellow',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              height: this.state.mapHeight
+            }
+        })
         return(
-            <View style={styles.CustomMapView}>
+            <View style={style.CustomMapView}>
                 <MapView
                 style={styles.map}
                 onRegionChangeComplete={this.onRegionChange}
@@ -51,8 +89,22 @@ class CustomMapView extends Component{
                 onUserLocationChange={this.onUserLocationChange}
                 showsUserLocation={this.state.userLocationPermission}
                 followsUserLocation={this.state.userLocationPermission}
-                ></MapView>
-                
+                >
+                    {this.state.markers.map((marker)=>{
+                        return(
+                            <Marker
+                                key={marker.placeId}
+                                coordinate={{
+                                    latitude: marker.coordinate.latitude,
+                                    latitudeDelta: 0.05,
+                                    longitude: marker.coordinate.longitude,
+                                    longitudeDelta: 0.05,
+                                }}
+                                title={marker.placeName}
+                            />
+                        )
+                    })}
+                </MapView>
             </View>
         )
     }
