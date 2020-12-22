@@ -38,7 +38,7 @@ export default class ReactMaps {
     
   }
  
-    static getNearbyLocation = (latitude,longitude ,radius,callback) => {
+    static getNearbyLocation = (latitude,longitude,radius,callback) => {  
       const url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + latitude + ',' + longitude + '&radius=' + radius + '&key=' + YOUR_API_KEY
       fetch(url)
     .then(res => {
