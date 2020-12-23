@@ -184,7 +184,7 @@ class RoteiroAutomaticoScreen extends Component{
                             listaPDI: this.state.listaPDI,
                             userLocation: this.state.userLocation
                         }
-                        this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
+                        this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
             </View>

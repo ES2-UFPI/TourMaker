@@ -3,21 +3,25 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import CustomButton from './ScreensModules/CustomButton';
 
+function HookComponents({ navigation, route, setState}) {
+    React.useEffect(() => {
+      const unsubscribe = navigation.addListener('focus', () => {
+        setState(route.params.listaPDI)
+      });
+  
+      return unsubscribe;
+    }, [navigation]);
+  
+    return null;
+  }
+
 class ControleRoteiroScreen extends Component{
     constructor(props){
         super(props)
-        var table = []
         var listaOrdenada = this.criaçãoRoteiro(props.route.params.listaPDI, props.route.params.userLocation)
-
-        if (listaOrdenada != null){
-            listaOrdenada.forEach(element => {
-                table.push([element.placeName,element.rating," "])
-            });
-        }
         this.state ={
             listaPDI: listaOrdenada,
             tableHead: ["Parada", "Avaliação", 'Excluir'],//avaliação Maps
-            tableData: table,
             userlocation: props.route.params.userLocation
         }
         
@@ -30,14 +34,6 @@ class ControleRoteiroScreen extends Component{
         a = this.criaçãoRoteiro(a,this.state.userlocation)
         this.setState({
             listaPDI: a
-        })
-        var a1 = []
-        a.forEach(element => {
-            a1.push([element.placeName,element.rating," "])
-        });
-
-        this.setState({
-            tableData: a1
         })
         
     }
@@ -88,9 +84,14 @@ class ControleRoteiroScreen extends Component{
 
 
     render(){
-        const paramsRota = {
-            listaPDI: this.state.listaPDI
+        var tableData = []
+        if (this.state.listaPDI != null){
+            this.state.listaPDI.forEach(element => {
+                tableData.push([element.placeName,element.rating," "])
+            });
         }
+        // console.log("Aqui a tabela", tableData)
+
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this.deleteStop(index)}>
               <View style={styles.btn}>
@@ -106,7 +107,7 @@ class ControleRoteiroScreen extends Component{
                     <Table borderStyle={{ borderColor: 'transparent' }}>
                         <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
                         {
-                            this.state.tableData.map((rowData, index) => (
+                            tableData.map((rowData, index) => (
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
@@ -123,10 +124,20 @@ class ControleRoteiroScreen extends Component{
                     title="Adicionar Parada"
                     color={styles.Buttons.color}
                     onPress={()=>{
+                        const paramsRota = {
+                            listaPDI: this.state.listaPDI,
+                            flagEdition: true
+                        }
                         this.props.navigation.push('RoteiroManual', paramsRota)
                     }}
                 />
-                
+                <HookComponents
+                    navigation={this.props.navigation}
+                    route={this.props.route}
+                    setState={(state)=>{
+                        this.setState({flag: 1})
+                    }}
+                />
             </View>
 
             
