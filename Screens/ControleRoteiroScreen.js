@@ -3,9 +3,10 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 import CustomButton from './ScreensModules/CustomButton';
 
-function HookComponents({ navigation, route, setState}) {
+function HookComponents({ navigation, route, setState, criaçãoRoteiro}) {
     React.useEffect(() => {
       const unsubscribe = navigation.addListener('focus', () => {
+        criaçãoRoteiro()
         setState(route.params.listaPDI)
       });
   
@@ -136,6 +137,9 @@ class ControleRoteiroScreen extends Component{
                     route={this.props.route}
                     setState={(state)=>{
                         this.setState({flag: 1})
+                    }}
+                    criaçãoRoteiro = {( ) => {
+                        this.criaçãoRoteiro(this.state.listaPDI, this.state.userlocation)
                     }}
                 />
             </View>

@@ -83,22 +83,16 @@ class RoteiroAutomaticoScreen extends Component{
                 break;
         }
         ReactMaps.getLocationByType(a,(result)=> {
-            var listaPDI = result.filter((element,index) => {return index < 5})
+            var listaPDI = this.state.listaPDI
+            var b =  result.filter((element,index) => {return index < 5})
+            b.forEach(element => {
+                listaPDI.push(element)
+            });
             this.setState({listaPDI: listaPDI});
-            listaPDI.forEach((item) => {
-                this.tableHandle(item)
-            })
         })
         
     }
 
-    tableHandle(data){
-        var tableData = this.state.tableData
-        tableData.push([data.placeName," "])//atualizar campos com dados dos PDIs mineredos
-        this.setState({
-            tableData: tableData
-        })
-    }
 
     deleteStop(index) { 
         var itemReadd
@@ -121,6 +115,13 @@ class RoteiroAutomaticoScreen extends Component{
     }
 
     render(){
+
+        var tableData = []
+        if (this.state.listaPDI != null){
+            this.state.listaPDI.forEach(element => {
+                tableData.push([element.placeName,element.rating," "])
+            });
+        }
         
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this.deleteStop(index)}>
@@ -162,7 +163,7 @@ class RoteiroAutomaticoScreen extends Component{
                     <Table borderStyle={{ borderColor: 'transparent' }}>
                         <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
                         {
-                            this.state.tableData.map((rowData, index) => (
+                            tableData.map((rowData, index) => (
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
