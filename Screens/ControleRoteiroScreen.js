@@ -7,34 +7,85 @@ class ControleRoteiroScreen extends Component{
     constructor(props){
         super(props)
         var table = []
-        if (props.route.params.listaPDI != null){
-            props.route.params.listaPDI.forEach(element => {
+        var listaOrdenada = this.criaçãoRoteiro(props.route.params.listaPDI, props.route.params.userLocation)
+
+        if (listaOrdenada != null){
+            listaOrdenada.forEach(element => {
                 table.push([element.placeName,element.rating," "])
             });
         }
         this.state ={
-            listaPDI: props.route.params.listaPDI,
+            listaPDI: listaOrdenada,
             tableHead: ["Parada", "Avaliação", 'Excluir'],//avaliação Maps
-            tableData: table
+            tableData: table,
+            userlocation: props.route.params.userLocation
         }
+        
     }
 
     deleteStop(index) { 
         var a = this.state.listaPDI.filter( (item, b) => {
             return b !== index
         })
+        a = this.criaçãoRoteiro(a,this.state.userlocation)
         this.setState({
             listaPDI: a
         })
+        var a1 = []
+        a.forEach(element => {
+            a1.push([element.placeName,element.rating," "])
+        });
 
-        a = this.state.tableData.filter((item, b) => {
-            return b !== index
-        })
         this.setState({
-            tableData: a
+            tableData: a1
         })
-        // Refazer/Reorganizar Roteiro
+        
     }
+
+    criaçãoRoteiro(listaOriginal,userlocation){
+        var resultRoteiro = []
+        var pontoAtual = {coordinate: userlocation}
+        while (listaOriginal.length > 0){
+            var menorDistancia = this.calculoLocalizacao(pontoAtual.coordinate,listaOriginal[0].coordinate)
+            var menorIndex = 0
+            listaOriginal.forEach((element,index) => {
+                var a =this.calculoLocalizacao(pontoAtual.coordinate,element.coordinate)
+                if (menorDistancia > a){
+                    menorDistancia = a
+                    menorIndex = index
+                }
+            });
+            resultRoteiro.push(listaOriginal[menorIndex])
+            pontoAtual = listaOriginal[menorIndex]
+            listaOriginal =  listaOriginal.filter((element,index) =>{
+                return index != menorIndex
+            })
+        }
+        return resultRoteiro
+    }
+
+    calculoLocalizacao(ponto1, ponto2){
+        var DLA = ponto1.latitude - ponto2.latitude
+        DLA = DLA >= 0 ? DLA : -DLA
+        DLA = {
+            grau: parseInt(DLA),
+            minuto: parseInt((DLA - parseInt(DLA))*60),
+            segundo:(((DLA - parseInt(DLA))*60)-parseInt((DLA - parseInt(DLA))*60))*60
+        }
+        DLA = (DLA.grau *60 + DLA.minuto + DLA.segundo/60)*1.852
+        
+
+        var DLO = ponto1.longitude - ponto2.longitude
+        DLO = DLO >= 0 ? DLO : -DLO
+        DLO = {
+            grau: parseInt(DLO),
+            minuto: parseInt((DLO - parseInt(DLO))*60),
+            segundo:(((DLO - parseInt(DLO))*60)-parseInt((DLO - parseInt(DLO))*60))*60
+        }
+        DLO = (DLO.grau *60 + DLO.minuto + DLO.segundo/60)*1.852
+        return(Math.sqrt(DLA*DLA + DLO*DLO))
+    }
+
 
     render(){
         const paramsRota = {
