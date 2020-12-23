@@ -26,7 +26,8 @@ class RoteiroAutomaticoScreen extends Component{
             listaPDI:[],
             tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             tableHead: ["Parada", 'Excluir'],//atualizar com os dados dos PDIs mineredos
-            tableData: []
+            tableData: [],
+            userLocation: null
 
         };
     }
@@ -147,7 +148,15 @@ class RoteiroAutomaticoScreen extends Component{
                     })}
                 </Picker>
 
-                <CustomMapView style = {{height: 200}}/>
+                <CustomMapView 
+                style = {{height: 200}} 
+                markers={this.state.listaPDI}
+                useUserLocation={(location)=>{
+                    this.setState({
+                        userLocation: location
+                    })
+                }}
+                />
 
                 <View style={styles.container}>
                     <Table borderStyle={{ borderColor: 'transparent' }}>
@@ -172,7 +181,8 @@ class RoteiroAutomaticoScreen extends Component{
                     color={styles.Buttons.color}
                     onPress={()=>{
                         const paramsRota = {
-                            listaPDI: this.state.listaPDI
+                            listaPDI: this.state.listaPDI,
+                            userLocation: this.state.userLocation
                         }
                         this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
                     }}

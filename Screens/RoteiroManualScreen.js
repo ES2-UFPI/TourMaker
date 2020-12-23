@@ -8,14 +8,6 @@ import CustomButton from './ScreensModules/CustomButton';
 import CustomMapView from "./ScreensModules/CustomMapView";
 import ReactMaps from '../APIs/ReactMaps'
 
-/*
-    Usar função abaixo para acessar parametro passados de tela para tela:
-        this.props.route.params
-        
-    Usar para passar props de uma tela a outra, coloque nos objetos:
-        paramsRoteiroAutomatico
-        paramsRoteiroManual
-*/
 
 class RoteiroManualScreen extends Component{
     constructor(props) {
@@ -27,7 +19,7 @@ class RoteiroManualScreen extends Component{
             tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             listaPDIselecao:[],
             tableHead: ["Parada", "Funcionamento", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
-
+            userLocation: null
         };    
     }
     deleteStop(index) { 
@@ -111,7 +103,6 @@ class RoteiroManualScreen extends Component{
     }
     
     render(){
-
         var tableData = []
         if (this.state.listaPDI != null){
             this.state.listaPDI.forEach(element => {
@@ -161,7 +152,15 @@ class RoteiroManualScreen extends Component{
                         return (<Picker.Item value = {item} label={item.placeName} key = {item.placeId}/>)
                     })}
                 </Picker>
-                <CustomMapView style = {{height: 200}} markers={this.state.listaPDI}/>
+                <CustomMapView 
+                style = {{height: 200}} 
+                markers={this.state.listaPDI}
+                useUserLocation={(location)=>{
+                    this.setState({
+                        userLocation: location
+                    })
+                }}
+                />
 
                 <View style={styles.container}>
                     <Table borderStyle={{ borderColor: 'transparent' }}>
@@ -186,7 +185,8 @@ class RoteiroManualScreen extends Component{
                     color={styles.Buttons.color}
                     onPress={()=>{
                         const paramsRota = {
-                            listaPDI: this.state.listaPDI
+                            listaPDI: this.state.listaPDI,
+                            userLocation: this.state.userLocation
                         }
                         var routeLength = this.props.navigation.dangerouslyGetState().routes.length
                         var previousScreen = this.props.navigation.dangerouslyGetState().routes[routeLength-2].name
@@ -203,7 +203,6 @@ class RoteiroManualScreen extends Component{
 
 
 }
-
 
 
 const styles = StyleSheet.create({
@@ -224,34 +223,3 @@ const styles = StyleSheet.create({
     btnText: { textAlign: 'center', color: '#fff' } 
   });
 export default RoteiroManualScreen;
-
-/*
-            "business_status" : "OPERATIONAL",
-            "formatted_address" : "Av. Min. Petrônio Portela, 1436-1508, Esperantina - PI, 64180-000, Brazil",
-            "geometry" : {
-            "location" : {
-                "lat" : -3.8884028,
-                "lng" : -42.2364677
-            },
-            "viewport" : {
-                "northeast" : {
-                    "lat" : -3.887052020107278,
-                    "lng" : -42.23513127010728
-                },
-                "southwest" : {
-                    "lat" : -3.889751679892722,
-                    "lng" : -42.23783092989272
-                }
-            }
-            },
-            "name" : "Pastelaria Grande Pastel",
-            "opening_hours" : {
-            "open_now" : false
-            },
-            "place_id" : "ChIJZQjdgwq4kgcRp7AEa-RHDkQ",
-            "rating" : 4.4,
-            "reference" : "ChIJZQjdgwq4kgcRp7AEa-RHDkQ",
-            "types" : [ "restaurant", "food", "point_of_interest", "establishment" ],
-            "user_ratings_total" : 57
-*/
-        
