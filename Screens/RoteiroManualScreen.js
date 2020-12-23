@@ -101,15 +101,6 @@ class RoteiroManualScreen extends Component{
         
     }
 
-    tableHandle(data){
-        var tableData = this.state.tableData
-        //var open = data.opening_hours.open_now ? "Aberto":"Fechado"
-        tableData.push([data.placeName,"placeholder"," "])//atualizar campos com dados dos PDIs minerados
-        this.setState({
-            tableData: tableData
-        })
-    }
-
     controlRepet(data){
         var a = this.state.listaPDIselecao.filter( item => {
             return item !== data
@@ -162,7 +153,6 @@ class RoteiroManualScreen extends Component{
                     onValueChange={(itemValue) =>{
                         var a = itemValue
                         this.state.listaPDI.push(a)
-                        this.tableHandle(a)
                         this.controlRepet(a)
                      }
                     }>
