@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Input, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 
@@ -20,12 +20,6 @@ import ReactMaps from '../APIs/ReactMaps'
 class RoteiroManualScreen extends Component{
     constructor(props) {
         super(props);
-        var table = []
-        if (props.route.params.listaPDI != undefined){
-            props.route.params.listaPDI.forEach(element => {
-                table.push([element.placeName,element.rating," "])
-            });
-        }
         this.state = {
             tipoPDI: " ",
             PDI:" ",
@@ -33,7 +27,6 @@ class RoteiroManualScreen extends Component{
             tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             listaPDIselecao:[],
             tableHead: ["Parada", "Funcionamento", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
-            tableData: table
 
         };    
     }
@@ -47,18 +40,6 @@ class RoteiroManualScreen extends Component{
         })
         this.setState({
             listaPDI: a
-        })
-
-        a = this.state.tableData.filter((item, b) => {
-            return b !== index
-        })
-        this.setState({
-            tableData: a
-        })
-        a = this.state.listaPDIselecao
-        a.push(itemReadd)
-        this.setState({
-            listaPDIselecao: a
         })
 
     }
@@ -139,19 +120,28 @@ class RoteiroManualScreen extends Component{
     }
     
     render(){
+
+        var tableData = []
+        if (this.state.listaPDI != null){
+            this.state.listaPDI.forEach(element => {
+                tableData.push([element.placeName,element.rating," "])
+            });
+        }
+
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this.deleteStop(index)}>
               <View style={styles.btn}>
                 <Text style={styles.btnText}>Excluir</Text>
               </View>
             </TouchableOpacity>
-          );
+        );
+        
         
         return(
 
             <View style={styles.RoteiroManualScreen}>
                 
-                <Text>Criar Novo Roteiro</Text>
+                {this.props.route.params.flagEdition? (<Text>Editando Roteiro</Text>) : (<Text>Criar Novo Roteiro</Text>)}
                 <Text>Escolha pra Onde quer ir e Tenha a Melhor Rota</Text>
                 <Picker
                     selectedValue={this.state.tipoPDI}
@@ -187,7 +177,7 @@ class RoteiroManualScreen extends Component{
                     <Table borderStyle={{ borderColor: 'transparent' }}>
                         <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
                         {
-                            this.state.tableData.map((rowData, index) => (
+                            tableData.map((rowData, index) => (
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
@@ -208,7 +198,13 @@ class RoteiroManualScreen extends Component{
                         const paramsRota = {
                             listaPDI: this.state.listaPDI
                         }
-                        this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
+                        var routeLength = this.props.navigation.dangerouslyGetState().routes.length
+                        var previousScreen = this.props.navigation.dangerouslyGetState().routes[routeLength-2].name
+                        if(previousScreen == 'Home'){
+                            this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
+                        }else{
+                            this.props.navigation.pop()
+                        }
                     }}
                 />
             </View>
