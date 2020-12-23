@@ -139,11 +139,6 @@ class RoteiroManualScreen extends Component{
     }
     
     render(){
-        
-        const paramsRota = {
-            listaPDI: this.state.listaPDI
-        }
-
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this.deleteStop(index)}>
               <View style={styles.btn}>
@@ -210,7 +205,10 @@ class RoteiroManualScreen extends Component{
                     title="Criar Roteiro"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('GerenciamentoRoteiro', paramsRota)
+                        const paramsRota = {
+                            listaPDI: this.state.listaPDI
+                        }
+                        this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
                     }}
                 />
             </View>

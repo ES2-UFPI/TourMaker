@@ -47,14 +47,14 @@ class HomeScreen extends Component{
                     title="Criar Roteiro Automatico"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('RoteiroAutomatico', paramsRoteiroAutomatico)
+                        this.props.navigation.push('RoteiroAutomatico', paramsRoteiroAutomatico)
                     }}
                 />
                 <CustomButton
                     title="Criar Roteiro Manual"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        this.props.navigation.navigate('RoteiroManual', paramsRoteiroManual)
+                        this.props.navigation.push('RoteiroManual', paramsRoteiroManual)
                     }}
                 />
             </View>

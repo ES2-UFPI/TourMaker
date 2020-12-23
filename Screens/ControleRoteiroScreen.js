@@ -37,9 +37,6 @@ class ControleRoteiroScreen extends Component{
     }
 
     render(){
-        const paramsRota = {
-            listaPDI: this.state.listaPDI
-        }
         const element = (data, index) => (
             <TouchableOpacity onPress={() => this.deleteStop(index)}>
               <View style={styles.btn}>
@@ -72,6 +69,9 @@ class ControleRoteiroScreen extends Component{
                     title="Adicionar Parada"
                     color={styles.Buttons.color}
                     onPress={()=>{
+                        const paramsRota = {
+                            listaPDI: this.state.listaPDI
+                        }
                         this.props.navigation.push('RoteiroManual', paramsRota)
                     }}
                 />
