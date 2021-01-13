@@ -17,11 +17,6 @@ class HomeScreen extends Component{
         UserLocation: null
     }
 
-
-    state = {
-        listaPDI: []
-    }
-
     render(){
 
         const paramsRoteiroAutomatico = {
