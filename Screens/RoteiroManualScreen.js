@@ -18,7 +18,7 @@ class RoteiroManualScreen extends Component{
             listaPDI:props.route.params.listaPDI === undefined ? []:props.route.params.listaPDI,
             tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
             listaPDIselecao:[],
-            tableHead: ["Parada", "Funcionamento", 'Excluir'],//atualizar campos com dados dos PDIs mineredos
+            tableHead: ["Parada", "Avaliação", 'Excluir','Detalhes'],//atualizar campos com dados dos PDIs mineredos
             userLocation: null
         };    
     }
@@ -35,7 +35,12 @@ class RoteiroManualScreen extends Component{
         })
 
     }
-
+    details(index){
+        const paramsDetalhes = {
+            PDI: this.state.listaPDI[index]
+        }
+        this.props.navigation.push('DetalhesPDI', paramsDetalhes)
+    }
 
     searchPDI(tipoPDI){
 
@@ -106,16 +111,25 @@ class RoteiroManualScreen extends Component{
         var tableData = []
         if (this.state.listaPDI != null){
             this.state.listaPDI.forEach(element => {
-                tableData.push([element.placeName,element.rating," "])
+                tableData.push([element.placeName,element.rating," "," "])
             });
         }
 
-        const element = (data, index) => (
-            <TouchableOpacity onPress={() => this.deleteStop(index)}>
+        const btnExcluir = (data, index) => (
+            <TouchableOpacity onPress={() => this.deleteStop(index) }>
               <View style={styles.btn}>
                 <Text style={styles.btnText}>Excluir</Text>
               </View>
             </TouchableOpacity>
+            
+        );
+        const verDetalhes = (data, index) => (
+            <TouchableOpacity onPress={() => this.details(index) }>
+              <View style={styles.btn}>
+                <Text style={styles.btnText}>Detalhes</Text>
+              </View>
+            </TouchableOpacity>
+            
         );
         
         
@@ -170,8 +184,8 @@ class RoteiroManualScreen extends Component{
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellIndex === 2 ? element(cellData, index) : cellData} textStyle={styles.text}/>
-                                        ))
+                                                <Cell key={cellIndex} data={cellIndex === 2 ? btnExcluir(cellData, index) : cellIndex ===3 ? verDetalhes(cellData, index) : cellData} textStyle={styles.text}/>                                        ))
+                                        
                                     }
                                 </TableWrapper>
                             ))
