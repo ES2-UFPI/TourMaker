@@ -30,7 +30,8 @@ export default class ReactMaps {
         place['placeId'] = googlePlace.place_id
         place['placeName'] = googlePlace.name
         place['rating'] = googlePlace.rating
-
+        place['formatted_address'] = googlePlace.formatted_address
+        place['opening_hours'] = googlePlace.opening_hours
         places.push(place);
       }
       callback(places)
@@ -68,7 +69,8 @@ export default class ReactMaps {
           place['placeId'] = googlePlace.place_id
           place['placeName'] = googlePlace.name
           place['rating'] = googlePlace.rating
-
+          place['formatted_address'] = googlePlace.formatted_address
+          place['opening_hours'] = googlePlace.opening_hours
           places.push(place);
         }
         callback(places)
@@ -108,6 +110,8 @@ export default class ReactMaps {
           place['placeId'] = googlePlace.place_id
           place['placeName'] = googlePlace.name
           place['rating'] = googlePlace.rating
+          place['formatted_address'] = googlePlace.formatted_address
+          place['opening_hours'] = googlePlace.opening_hours
 
           places.push(place);
         }
