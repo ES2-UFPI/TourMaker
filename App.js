@@ -10,6 +10,7 @@ import HomeScreen from './Screens/HomeScreen.js';
 import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
 import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
 import ControleRoteiroScreen from './Screens/ControleRoteiroScreen.js';
+import DetalhesPDIScreen from './Screens/DetalhesPDIScreen.js'
 
 
 
@@ -44,6 +45,11 @@ function App() {
         <Stack.Screen
           name="GerenciamentoRoteiro"
           component={ControleRoteiroScreen}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="DetalhesPDI"
+          component={DetalhesPDIScreen}
           options={StackOptionDefault}
         />
       </Stack.Navigator>
