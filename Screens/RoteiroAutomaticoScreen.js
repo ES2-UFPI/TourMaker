@@ -28,11 +28,12 @@ class RoteiroAutomaticoScreen extends Component{
             tableHead: ["Tipo", "Quantidade", "Excluir"],//atualizar com os dados dos tipos escolhidos
             tableData: [],
             userLocation: null,
-            listaTipos: []
+            listaTipos: [],
+            flags: []
         };
     }
 
-    searchPDI(item){
+    searchPDI(item,index){
 
         var a
         switch (item.tipoPDI) {
@@ -82,10 +83,11 @@ class RoteiroAutomaticoScreen extends Component{
                 a = "park"
                 break;
         }
-        console.log(1,a)
+        //console.log(1,a)
         ReactMaps.getLocationByType(a,(result)=> {
-            console.log(2,a)
+            //console.log(2,a)
             var listaPDI = this.state.listaPDI
+            //console.log(3,listaPDI.length)
             if (listaPDI.length == 0) {
                 var b =  result.filter((element,index) => {return index < item.quant})
                 b.forEach(element => {
@@ -110,7 +112,9 @@ class RoteiroAutomaticoScreen extends Component{
                     })
                 }
             }
-            this.setState({listaPDI: listaPDI});
+            var flags = this.state.flags
+            flags[index] = true
+            this.setState({listaPDI: listaPDI, flags: flags});
         })
         
     }
@@ -118,7 +122,10 @@ class RoteiroAutomaticoScreen extends Component{
     criarRoteiro(index) {
         if (this.state.listaTipos.length != 0 && this.state.listaTipos.length > index) {
             //console.log(this.state.listaTipos[index])
-            this.searchPDI(this.state.listaTipos[index])
+            this.searchPDI(this.state.listaTipos[index], index)
+            var flags = this.state.flags
+            flags.push(false)
+            this.setState({flags:flags})
             this.criarRoteiro(index+1)
         }
     }
@@ -176,6 +183,19 @@ class RoteiroAutomaticoScreen extends Component{
           );
 
           //console.log(this.state.listaPDI)
+          var podeSeguir = true
+          for (var i = 0; i < this.state.flags.length; i++){
+              podeSeguir = podeSeguir && this.state.flags[i]
+          }
+          if (podeSeguir && this.state.flags.length != 0) {
+              console.log("\n\n ~~~~ok~~~~\n\n")
+              const paramsRota = {
+                listaPDI: this.state.listaPDI,
+                userLocation: this.state.userLocation
+            }
+            this.setState({flags: []})
+            this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
+          }
 
         return(
             <View style={styles.RoteiroAutomaticoScreen}>
@@ -231,15 +251,9 @@ class RoteiroAutomaticoScreen extends Component{
                     title="Criar Roteiro Automático"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        /*
-                        const paramsRota = {
-                            listaPDI: this.state.listaPDI,
-                            userLocation: this.state.userLocation
-                        }
-                        this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
-                        */
                         this.setState({
-                            listaPDI: []
+                            listaPDI: [],
+                            flags: []
                         })
                         this.criarRoteiro(0)
                     }}
