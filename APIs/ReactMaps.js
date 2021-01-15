@@ -24,6 +24,12 @@ export default class ReactMaps {
         }
 
         var gallery = []
+        if (googlePlace.photos){
+          for (let photo of googlePlace.photos){
+            var photoUrl = photo.photo_reference;
+            gallery.push(photoUrl)
+          }
+        }
 
         place['placeTypes'] = googlePlace.types
         place['coordinate'] = coordinate
@@ -32,6 +38,7 @@ export default class ReactMaps {
         place['rating'] = googlePlace.rating
         place['formatted_address'] = googlePlace.formatted_address
         place['opening_hours'] = googlePlace.opening_hours
+        place['gallery'] = gallery
         places.push(place);
       }
       callback(places)
@@ -63,6 +70,12 @@ export default class ReactMaps {
           }
 
           var gallery = []
+          if (googlePlace.photos){
+            for (let photo of googlePlace.photos){
+              var photoUrl = photo.photo_reference;
+              gallery.push(photoUrl)
+            }
+          }
 
           place['placeTypes'] = googlePlace.types
           place['coordinate'] = coordinate
@@ -71,6 +84,7 @@ export default class ReactMaps {
           place['rating'] = googlePlace.rating
           place['formatted_address'] = googlePlace.formatted_address
           place['opening_hours'] = googlePlace.opening_hours
+          place['gallery'] = gallery
           places.push(place);
         }
         callback(places)
@@ -104,7 +118,12 @@ export default class ReactMaps {
           }
 
           var gallery = []
-
+          if (googlePlace.photos){
+            for (let photo of googlePlace.photos){
+              var photoUrl = photo.photo_reference;
+              gallery.push(photoUrl)
+            }
+          }
           place['placeTypes'] = googlePlace.types
           place['coordinate'] = coordinate
           place['placeId'] = googlePlace.place_id
@@ -112,7 +131,7 @@ export default class ReactMaps {
           place['rating'] = googlePlace.rating
           place['formatted_address'] = googlePlace.formatted_address
           place['opening_hours'] = googlePlace.opening_hours
-
+          place['gallery'] = gallery
           places.push(place);
         }
         callback(places)
@@ -120,5 +139,17 @@ export default class ReactMaps {
       .catch(error => {
         console.log(error);
       });
+  }
+
+  static getPhotoByReference = (reference, callback) => {
+    FirebaseFunctions.recoverKey(key => {
+      this.getPhotoByReferenceIntern(reference, key, callback)
+    })
+  }
+
+  static getPhotoByReferenceIntern = (reference, API_KEY, callback) =>{
+    const url = 'https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=' + reference + '&key=' + API_KEY
+    callback(url)
+    
   }
 }
