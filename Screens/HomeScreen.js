@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 
 import CustomMapView from './ScreensModules/CustomMapView';
 import CustomButton from './ScreensModules/CustomButton';
-import ReactMaps from '../APIs/ReactMaps'
 
 /*
     Usar para passar props de uma tela a outra, coloque nos objetos:
@@ -29,14 +28,7 @@ class HomeScreen extends Component{
         return(
             <View style={styles.Home}>
                 <CustomMapView
-                    markers={this.state.listaPDI}
-                    useUserLocation={(location)=>{
-                        ReactMaps.getNearbyLocation(location.latitude, location.longitude, 200, (result) => {
-                            this.setState({
-                                listaPDI: result
-                            })
-                        })
-                    }}
+                    useUserLocation={true}
                 />
                 <CustomButton
                     title="Criar Roteiro Automatico"
