@@ -169,7 +169,7 @@ class RoteiroManualScreen extends Component{
                 <CustomMapView 
                 style = {{height: 200}} 
                 markers={this.state.listaPDI}
-                useUserLocation={(location)=>{
+                UserLocation={(location)=>{
                     this.setState({
                         userLocation: location
                     })
