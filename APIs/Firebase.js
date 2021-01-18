@@ -16,8 +16,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-var UserRef = firebase.database().ref("Usuario/")
-var CommentRef = firebase.database().ref("CommentPDI/")
+var UserRef = firebase.database().ref('Usuario/')
+
+
 
 export default class FirebaseFunctions {
     static async recoverKey(callback){
@@ -35,18 +36,20 @@ export default class FirebaseFunctions {
     }
 
     static writeComment(IdPDI,Ratting,Body,CPFUser = "CPFPlaceholder"){
-        CommentRef.ref(IdPDI).push({ 
+        firebase.database().ref("CommentPDI/" + IdPDI).push({ 
             Avaliação: Ratting,
             CPFUsuario: CPFUser,
             Corpo: Body
-        })
+        }) 
+        
     }
 
     static returnComments(IdPDI,callback){
-        CommentRef.ref(IdPDI).once("value",listComment=>{
+        firebase.database().ref("CommentPDI/" + IdPDI).once("value",listComment=>{
             var lista = []
             listComment.forEach(element => {
                 let comment = element.val()
+
                 comment["key"] = element.key
                 lista.push(comment);
             });
@@ -54,11 +57,11 @@ export default class FirebaseFunctions {
         })
     }
     static deleteComment(IdPDI,IdComment){
-        CommentRef.ref(IdPDI).ref(IdComment).remove()
+        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).remove()
     }
 
     static editComment(IdPDI,IdComment,Ratting,Body, CPFUser = "CPFPlaceholder"){
-        CommentRef.ref(IdPDI).ref(IdComment).set({ 
+        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).set({ 
             Avaliação: Ratting,
             CPFUsuario: CPFUser,
             Corpo: Body
