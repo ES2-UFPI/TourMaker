@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Image} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image, TextInput} from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { Table, TableWrapper, Row, Cell } from 'react-native-table-component';
 
-import CustomButton from './ScreensModules/CustomButton';
-import FirebaseFunctions from'../APIs/Firebase.js'
-import CustomMapView from "./ScreensModules/CustomMapView";
-import ReactMaps from '../APIs/ReactMaps'
+import FirebaseFunctions from'../APIs/Firebase.js';
+import ReactMaps from '../APIs/ReactMaps';
+import StarRating from './ScreensModules/StarRating.js';
 
 
 class DetalhesPDIScreen extends Component{
@@ -20,6 +19,10 @@ class DetalhesPDIScreen extends Component{
             //isOpen : props.route.params.PDI.opening_hours.open_now === true ? "Aberto" : "Fechado",
             comments : [],
             tableHead: ["Comentários", "Avaliação"],
+            id : props.route.params.PDI.placeId,
+            avaliando : false,
+            newRating : null,
+            newComment : "",
         }
         /*
         try {
@@ -42,8 +45,19 @@ class DetalhesPDIScreen extends Component{
         })
     }
 
-
-
+    showAval(){
+        this.setState(
+            {
+                avaliando: !this.state.avaliando
+            }
+        )
+    }
+    sendAval(){
+        var id = this.state.id
+        var newRating = this.state.newRating
+        var newComment = this.state.newComment
+        FirebaseFunctions.writeComment(id, newRating, newComment)
+    }
     render(){
         var conteudo = "Este local "
         if (this.state.isOpen != undefined){
@@ -75,8 +89,46 @@ class DetalhesPDIScreen extends Component{
                     ))
                 }
                 </View>
+                
+                
             </View>
-            
+            {
+                    !this.state.avaliando ? (
+                        <TouchableOpacity onPress= {() => this.showAval()}>
+                            <View style={styles.btn}>
+                                <Text style={styles.btnText}>Avaliar</Text>
+                            </View>
+                        </TouchableOpacity>
+                    ): (
+                        <View style={{margin:10}}>
+                            <StarRating getRating = {(result) =>
+                                this.setState({
+                                    newRating : result+1
+                                })
+                            
+                            }/>
+                            <TextInput style={styles.txtInpt} editable numberOfLines={1} multiline={true} placeholder='Comentário(opcional)' onChangeText={(value) => 
+                                this.setState({
+                                    newComment : value
+                                })
+                            }></TextInput>
+                            <View style ={{flexDirection:'row', justifyContent:'space-between'}}>
+                                <TouchableOpacity onPress= {() => this.sendAval()}>
+                                    <View style={styles.btn}>
+                                        <Text style={styles.btnText}>Enviar Avaliação</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress= {() => this.showAval()}>
+                                    <View style={styles.btn}>
+                                        <Text style={styles.btnText}>Cancelar Avaliação</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                            
+                        </View>
+                        
+                    )
+                }
             <Table borderStyle={{ borderColor: 'transparent' }}>
                 <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
                     {
@@ -114,10 +166,11 @@ const styles = StyleSheet.create({
     head: { height: 40,width: 400, backgroundColor: '#1abc9c' },
     text: { margin: 6 },
     row: { flexDirection: 'row', backgroundColor: '#f1f8ff' },
-    btn: { width: 58, height: 18, backgroundColor: '#78B7BB',  borderRadius: 2 },
+    btn: { backgroundColor: '#78B7BB',  borderRadius: 2 , borderRadius:10, marginTop:10, marginBottom:20, paddingHorizontal:5},
     btnText: { textAlign: 'center', color: '#fff' } ,
     img: {width:200, height:200},
     viewText:{padding: 10, alignItems:'center', backgroundColor:'#c5fcf1',alignSelf:'stretch', margin:5, borderRadius:50, borderWidth:1, borderColor:'#1abc9c'},
-    viewAddress:{alignSelf:'stretch', flexDirection:'row', flexWrap:'wrap', marginHorizontal:20, justifyContent:'center'}
+    viewAddress:{alignSelf:'stretch', flexDirection:'row', flexWrap:'wrap', marginHorizontal:20, justifyContent:'center'},
+    txtInpt :{borderWidth:1, width:250, maxHeight:75, marginTop:10, paddingLeft:4}
   });
 export default DetalhesPDIScreen;
