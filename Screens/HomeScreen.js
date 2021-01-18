@@ -28,7 +28,7 @@ class HomeScreen extends Component{
         return(
             <View style={styles.Home}>
                 <CustomMapView
-                    useUserLocation={true}
+                    EnableNearbySeach={true}
                 />
                 <CustomButton
                     title="Criar Roteiro Automatico"

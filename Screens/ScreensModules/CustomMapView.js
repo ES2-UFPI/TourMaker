@@ -54,18 +54,27 @@ class CustomMapView extends Component{
             variLongitude = variLongitude >= 0 ? variLongitude : -variLongitude
         }
         if(
-            this.props.useUserLocation == true &&
+            this.props.EnableNearbySeach &&
             variLatitude > diferencaAceitavel &&
             variLongitude > diferencaAceitavel
         ){
-            this.useUserLocation({
+            this.NearbySeach({
+                latitude: UserCoords.latitude,
+                longitude: UserCoords.longitude,
+            })
+        }
+        if(this.props.UserLocation !== undefined &&
+            variLatitude > diferencaAceitavel &&
+            variLongitude > diferencaAceitavel
+        ){
+            this.props.UserLocation({
                 latitude: UserCoords.latitude,
                 longitude: UserCoords.longitude,
             })
         }
     }
 
-    useUserLocation = (location)=>{
+    NearbySeach = (location)=>{
         ReactMaps.getNearbyLocation(location.latitude, location.longitude, 200, (result) => {
             this.setState({
                 PDIPerUserLocation: result
