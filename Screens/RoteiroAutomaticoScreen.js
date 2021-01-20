@@ -25,17 +25,18 @@ class RoteiroAutomaticoScreen extends Component{
             PDI:" ",
             listaPDI:[],
             tiposPDI: ["Alimentação","Compras", "Hospedagem", "Parque de Diversões","Galeria de Arte","Biblioteca","Atração Turistica","Zoologico","Museu","Cinema","Spa", "Estádio", "Parque"],
-            tableHead: ["Parada", 'Excluir'],//atualizar com os dados dos PDIs mineredos
+            tableHead: ["Tipo", "Quantidade", "Excluir"],//atualizar com os dados dos tipos escolhidos
             tableData: [],
-            userLocation: null
-
+            userLocation: null,
+            listaTipos: [],
+            flags: []
         };
     }
 
-    searchPDI(tipoPDI){
+    searchPDI(item,index){
 
         var a
-        switch (tipoPDI) {
+        switch (item.tipoPDI) {
             case "Alimentação":
                 a = "restaurant" //trocar para food se possivel
                 break;
@@ -82,44 +83,94 @@ class RoteiroAutomaticoScreen extends Component{
                 a = "park"
                 break;
         }
+        //console.log(1,a)
         ReactMaps.getLocationByType(a,(result)=> {
+            //console.log(2,a)
             var listaPDI = this.state.listaPDI
-            var b =  result.filter((element,index) => {return index < 5})
-            b.forEach(element => {
-                listaPDI.push(element)
-            });
-            this.setState({listaPDI: listaPDI});
+            //console.log(3,listaPDI.length)
+            if (listaPDI.length == 0) {
+                var b =  result.filter((element,index) => {return index < item.quant})
+                b.forEach(element => {
+                    listaPDI.push(element)
+                });
+            }
+            else {
+                var i
+                for (i = 0; i < item.quant; i++){
+                    var menorDistancia = this.calculoLocalizacao(listaPDI[listaPDI.length-1].coordinate,result[0].coordinate)
+                    var menorIndex = 0
+                    result.forEach((element,index) => {
+                        var a =this.calculoLocalizacao(listaPDI[listaPDI.length-1].coordinate,element.coordinate)
+                        if (menorDistancia > a){
+                            menorDistancia = a
+                            menorIndex = index
+                        }
+                    });
+                    listaPDI.push(result[menorIndex])
+                    result =  result.filter((element,index) =>{
+                        return index != menorIndex
+                    })
+                }
+            }
+            var flags = this.state.flags
+            flags[index] = true
+            this.setState({listaPDI: listaPDI, flags: flags});
         })
         
     }
 
+    criarRoteiro(index) {
+        if (this.state.listaTipos.length != 0 && this.state.listaTipos.length > index) {
+            //console.log(this.state.listaTipos[index])
+            this.searchPDI(this.state.listaTipos[index], index)
+            var flags = this.state.flags
+            flags.push(false)
+            this.setState({flags:flags})
+            this.criarRoteiro(index+1)
+        }
+    }
 
     deleteStop(index) { 
         var itemReadd
-        var a = this.state.listaPDI.filter( (item, b) => {
+        var a = this.state.listaTipos.filter( (item, b) => {
             if(b === index){
                 itemReadd = item
             }
             return b !== index
         })
         this.setState({
-            listaPDI: a
+            listaTipos: a
         })
+    }
 
-        a = this.state.tableData.filter((item, b) => {
-            return b !== index
-        })
-        this.setState({
-            tableData: a
-        })
+    calculoLocalizacao(ponto1, ponto2){
+        var DLA = ponto1.latitude - ponto2.latitude
+        DLA = DLA >= 0 ? DLA : -DLA
+        DLA = {
+            grau: parseInt(DLA),
+            minuto: parseInt((DLA - parseInt(DLA))*60),
+            segundo:(((DLA - parseInt(DLA))*60)-parseInt((DLA - parseInt(DLA))*60))*60
+        }
+        DLA = (DLA.grau *60 + DLA.minuto + DLA.segundo/60)*1.852
+        
+
+        var DLO = ponto1.longitude - ponto2.longitude
+        DLO = DLO >= 0 ? DLO : -DLO
+        DLO = {
+            grau: parseInt(DLO),
+            minuto: parseInt((DLO - parseInt(DLO))*60),
+            segundo:(((DLO - parseInt(DLO))*60)-parseInt((DLO - parseInt(DLO))*60))*60
+        }
+        DLO = (DLO.grau *60 + DLO.minuto + DLO.segundo/60)*1.852
+        return(Math.sqrt(DLA*DLA + DLO*DLO))
     }
 
     render(){
 
         var tableData = []
-        if (this.state.listaPDI != null){
-            this.state.listaPDI.forEach(element => {
-                tableData.push([element.placeName,element.rating," "])
+        if (this.state.listaTipos != null){
+            this.state.listaTipos.forEach(element => {
+                tableData.push([element.tipoPDI,element.quant," "])
             });
         }
         
@@ -131,6 +182,21 @@ class RoteiroAutomaticoScreen extends Component{
             </TouchableOpacity>
           );
 
+          //console.log(this.state.listaPDI)
+          var podeSeguir = true
+          for (var i = 0; i < this.state.flags.length; i++){
+              podeSeguir = podeSeguir && this.state.flags[i]
+          }
+          if (podeSeguir && this.state.flags.length != 0) {
+              console.log("\n\n ~~~~ok~~~~\n\n")
+              const paramsRota = {
+                listaPDI: this.state.listaPDI,
+                userLocation: this.state.userLocation
+            }
+            this.setState({flags: []})
+            this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
+          }
+
         return(
             <View style={styles.RoteiroAutomaticoScreen}>
                 
@@ -140,8 +206,12 @@ class RoteiroAutomaticoScreen extends Component{
                     selectedValue={this.state.tipoPDI}
                     style={{ height: 50, width: 200 }}
                     onValueChange={(itemValue, itemIndex) =>
-                        {this.setState({ tipoPDI: itemValue }),
-                        this.searchPDI( itemValue ) }
+                        {//this.setState({ tipoPDI: itemValue })
+                        //this.searchPDI( itemValue ) }
+                        var listaTipos = this.state.listaTipos
+                        listaTipos.push({ tipoPDI: itemValue , quant:1})
+                        this.setState({ listaTipos })
+                    }
                     }>
                     <Picker.Item label= "Tipo"/>
                     {this.state.tiposPDI.map((item, index) => {
@@ -152,7 +222,7 @@ class RoteiroAutomaticoScreen extends Component{
                 <CustomMapView 
                 style = {{height: 200}} 
                 markers={this.state.listaPDI}
-                useUserLocation={(location)=>{
+                UserLocation={(location)=>{
                     this.setState({
                         userLocation: location
                     })
@@ -167,7 +237,7 @@ class RoteiroAutomaticoScreen extends Component{
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellIndex === 1 ? element(cellData, index) : cellData} textStyle={styles.text}/>
+                                            <Cell key={cellIndex} data={cellIndex === 2 ? element(cellData, index) : cellData} textStyle={styles.text}/>
                                         ))
                                     }
                                 </TableWrapper>
@@ -181,11 +251,11 @@ class RoteiroAutomaticoScreen extends Component{
                     title="Criar Roteiro Automático"
                     color={styles.Buttons.color}
                     onPress={()=>{
-                        const paramsRota = {
-                            listaPDI: this.state.listaPDI,
-                            userLocation: this.state.userLocation
-                        }
-                        this.props.navigation.push('GerenciamentoRoteiro', paramsRota)
+                        this.setState({
+                            listaPDI: [],
+                            flags: []
+                        })
+                        this.criarRoteiro(0)
                     }}
                 />
             </View>

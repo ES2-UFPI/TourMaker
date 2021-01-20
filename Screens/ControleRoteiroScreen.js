@@ -22,7 +22,7 @@ class ControleRoteiroScreen extends Component{
         var listaOrdenada = this.criaçãoRoteiro(props.route.params.listaPDI, props.route.params.userLocation)
         this.state ={
             listaPDI: listaOrdenada,
-            tableHead: ["Parada", "Avaliação", 'Excluir'],//avaliação Maps
+            tableHead: ["Parada", "Avaliação", 'Excluir', 'Detalhes'],//avaliação Maps
             userlocation: props.route.params.userLocation
         }
         
@@ -38,7 +38,12 @@ class ControleRoteiroScreen extends Component{
         })
         
     }
-
+    details(index){
+        const paramsDetalhes = {
+            PDI: this.state.listaPDI[index]
+        }
+        this.props.navigation.push('DetalhesPDI', paramsDetalhes)
+    }
     criaçãoRoteiro(listaOriginal,userlocation){
         var resultRoteiro = []
         var pontoAtual = {coordinate: userlocation}
@@ -88,7 +93,7 @@ class ControleRoteiroScreen extends Component{
         var tableData = []
         if (this.state.listaPDI != null){
             this.state.listaPDI.forEach(element => {
-                tableData.push([element.placeName,element.rating," "])
+                tableData.push([element.placeName,element.rating," ", " "])
             });
         }
         // console.log("Aqui a tabela", tableData)
@@ -100,7 +105,14 @@ class ControleRoteiroScreen extends Component{
               </View>
             </TouchableOpacity>
           );
-
+          const verDetalhes = (data, index) => (
+            <TouchableOpacity onPress={() => this.details(index) }>
+              <View style={styles.btn}>
+                <Text style={styles.btnText}>Detalhes</Text>
+              </View>
+            </TouchableOpacity>
+            
+        );
         return(
             <View style={styles.RotaScreen}>
                 <Text>Gereciamento de Roteiro</Text>
@@ -112,7 +124,7 @@ class ControleRoteiroScreen extends Component{
                                 <TableWrapper key={index} style={styles.row}>
                                     {
                                         rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellIndex === 2 ? element(cellData, index) : cellData} textStyle={styles.text}/>
+                                            <Cell key={cellIndex} data={cellIndex === 2 ? element(cellData, index) : cellIndex === 3 ? verDetalhes(cellData, index) : cellData} textStyle={styles.text} />
                                         ))
                                     }
                                 </TableWrapper>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, View} from 'react-native';
 import MapView, { Marker } from 'react-native-maps'
 import Permissions from '../../APIs/Permissions'
+import ReactMaps from '../../APIs/ReactMaps'
 
 class CustomMapView extends Component{
     constructor(props){
@@ -15,16 +16,19 @@ class CustomMapView extends Component{
             mapHeight: height,
             markers: markers,
             region: null,
-            userLocationPermission: false
+            userLocationPermission: false,
+            PDIPerUserLocation: []
         }
     }
 
     onRegionChange = (region) => {
         this.setState ({ region });
     }
+
     onUserLocationChange = (location) => {
         let UserCoords = location.nativeEvent.coordinate
         var locationAntigo = null
+        var diferencaAceitavel = 0.0001
         if(this.state.region !== null){
             locationAntigo = {
                 latitude: this.state.region.latitude,
@@ -49,13 +53,35 @@ class CustomMapView extends Component{
             variLongitude = (UserCoords.longitude - locationAntigo.longitude)
             variLongitude = variLongitude >= 0 ? variLongitude : -variLongitude
         }
-        if(this.props.useUserLocation !== undefined && variLatitude > 0.0001 && variLongitude > 0.0001){
-            this.props.useUserLocation({
+        if(
+            this.props.EnableNearbySeach &&
+            variLatitude > diferencaAceitavel &&
+            variLongitude > diferencaAceitavel
+        ){
+            this.NearbySeach({
+                latitude: UserCoords.latitude,
+                longitude: UserCoords.longitude,
+            })
+        }
+        if(this.props.UserLocation !== undefined &&
+            variLatitude > diferencaAceitavel &&
+            variLongitude > diferencaAceitavel
+        ){
+            this.props.UserLocation({
                 latitude: UserCoords.latitude,
                 longitude: UserCoords.longitude,
             })
         }
     }
+
+    NearbySeach = (location)=>{
+        ReactMaps.getNearbyLocation(location.latitude, location.longitude, 200, (result) => {
+            this.setState({
+                PDIPerUserLocation: result
+            })
+        })
+    }
+
     callbackPermissionLocation = (status) => {
         if(status != "granted"){
             alert("Permissão de localização não foi concedida!")
@@ -70,6 +96,7 @@ class CustomMapView extends Component{
     componentDidMount(){
         Permissions.verifyLocationPermission(this.callbackPermissionLocation)           
     }
+
     render(){
         const style = StyleSheet.create({
             CustomMapView: {
@@ -94,6 +121,21 @@ class CustomMapView extends Component{
                         return(
                             <Marker
                                 key={marker.placeId}
+                                coordinate={{
+                                    latitude: marker.coordinate.latitude,
+                                    latitudeDelta: 0.05,
+                                    longitude: marker.coordinate.longitude,
+                                    longitudeDelta: 0.05,
+                                }}
+                                title={marker.placeName}
+                            />
+                        )
+                    })}
+                    {this.state.PDIPerUserLocation.map((marker)=>{
+                        return(
+                            <Marker
+                                key={marker.placeId}
+                                pinColor="blue"
                                 coordinate={{
                                     latitude: marker.coordinate.latitude,
                                     latitudeDelta: 0.05,
