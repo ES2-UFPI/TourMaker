@@ -88,84 +88,69 @@ class DetalhesPDIScreen extends Component{
         else{
             conteudo += "não fornece dados de horário de funcionamento"
         }
-                    
+        console.log(this.state.comments)
         return(
-        <View style={styles.DetalhesPDIScreen}>
-            <Image source={this.state.gallery} style={styles.img}/>
-            <View style={styles.viewText}>            
-                <Text>{this.state.nome}</Text>
-                <View style={styles.viewAddress}>
-                {
-                    
-                    this.state.address.map((data, index) => (
-                        <Text key={index}>{data}</Text>
-
-                    ))
-                }
-                </View>
-                <View style={styles.viewAddress}>
-                {
-                    conteudo.split(' ').map((data, index) => (
-                        <Text key={index}>{data} </Text>
-
-                    ))
-                }
-                </View>
-                
-                
-            </View>
-            {
-                    !this.state.avaliando ? (
-                        <TouchableOpacity onPress= {() => this.showAval()}>
-                            <View style={styles.btn}>
-                                <Text style={styles.btnText}>Avaliar</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ): (
-                        <View style={{margin:10}}>
-                            <StarRating getRating = {(result) => this.setRating(result)}/>
-                            <TextInput style={styles.txtInpt} editable numberOfLines={1} multiline={true} placeholder='Comentário(opcional)' onChangeText={(value) => 
-                                this.setState({
-                                    newComment : value
-                                })
-                            }></TextInput>
-                            <View style ={{flexDirection:'row', justifyContent:'space-between'}}>
-                                <TouchableOpacity onPress= {() => this.sendAval()}>
-                                    <View style={styles.btn}>
-                                        <Text style={styles.btnText}>Enviar Avaliação</Text>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress= {() => this.showAval()}>
-                                    <View style={styles.btn}>
-                                        <Text style={styles.btnText}>Cancelar Avaliação</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                            
-                        </View>
-                        
-                    )
-                }
-            <Table borderStyle={{ borderColor: 'transparent' }}>
-                <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
+            <View style={styles.DetalhesPDIScreen}>
+                <Image source={this.state.gallery} style={styles.img}/>
+                <View style={styles.viewText}>            
+                    <Text>{this.state.nome}</Text>
+                    <View style={styles.viewAddress}>
                     {
-                        this.state.comments.map((rowData, index) =>(
-                            <TableWrapper key={index} style={styles.row}> 
-                                {   
-                                    rowData.map((cellData, cellIndex) => (
-                                            <Cell key={cellIndex} data={cellData} textStyle={styles.text}></Cell>
-                                    ))
-
-                                }
-                            
-                            </TableWrapper>
-
-
+                        this.state.address.map((data, index) => (
+                            <Text key={index}>{data}</Text>
                         ))
                     }
-            </Table>
-            
-        </View>
+                    </View>
+                    <View style={styles.viewAddress}>
+                    {
+                        conteudo.split(' ').map((data, index) => (
+                            <Text key={index}>{data} </Text>
+                        ))
+                    }
+                    </View>
+                </View>
+                {!this.state.avaliando ? (
+                    <TouchableOpacity onPress= {() => this.showAval()}>
+                        <View style={styles.btn}>
+                            <Text style={styles.btnText}>Avaliar</Text>
+                        </View>
+                    </TouchableOpacity>
+                ): (
+                    <View style={{margin:10}}>
+                        <StarRating getRating = {(result) => this.setRating(result)}/>
+                        <TextInput style={styles.txtInpt} editable numberOfLines={1} multiline={true} placeholder='Comentário(opcional)' onChangeText={(value) => 
+                            this.setState({
+                                newComment : value
+                            })
+                        }></TextInput>
+                        <View style ={{flexDirection:'row', justifyContent:'space-between'}}>
+                            <TouchableOpacity onPress= {() => this.sendAval()}>
+                                <View style={styles.btn}>
+                                    <Text style={styles.btnText}>Enviar Avaliação</Text>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress= {() => this.showAval()}>
+                                <View style={styles.btn}>
+                                    <Text style={styles.btnText}>Cancelar Avaliação</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                        
+                    </View>
+                )}
+                <Table borderStyle={{ borderColor: 'transparent' }}>
+                    <Row data={this.state.tableHead} style={styles.head} textStyle={styles.text} />
+                    {this.state.comments.map((rowData, index) =>(
+                        <TableWrapper key={index} style={styles.row}> 
+                            {   
+                                rowData.map((cellData, cellIndex) => (
+                                    <Cell key={cellIndex} data={cellData} textStyle={styles.text}></Cell>
+                                ))
+                            }
+                        </TableWrapper>
+                    ))}
+                </Table>
+            </View>
         )
         
     }
@@ -180,7 +165,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'flex-start',
     },
-    head: { height: 40,width: 400, backgroundColor: '#1abc9c' , flex:1},
+    head: { height: 40, width: 400, backgroundColor: '#1abc9d'},
     text: { margin: 6 },
     row: { flexDirection: 'row', backgroundColor: '#f1f8ff' },
     btn: { backgroundColor: '#78B7BB',  borderRadius: 2 , borderRadius:10, marginTop:10, marginBottom:20, paddingHorizontal:5},
