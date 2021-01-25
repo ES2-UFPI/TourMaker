@@ -44,12 +44,11 @@ export default class FirebaseFunctions {
         
     }
 
-    static returnComments(IdPDI,callback){
-        firebase.database().ref("CommentPDI/" + IdPDI).once("value",listComment=>{
+    static returnComments(IdPDI, callback){
+        firebase.database().ref("CommentPDI/" + IdPDI).on("value", listComment=>{
             var lista = []
             listComment.forEach(element => {
                 let comment = element.val()
-
                 comment["key"] = element.key
                 lista.push(comment);
             });
