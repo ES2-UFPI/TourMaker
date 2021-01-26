@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+import * as Google from 'expo-google-app-auth';
 import 'firebase/database';
 import 'firebase/auth';
 
@@ -14,39 +15,39 @@ const firebaseConfig = {
 };
 
 if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
 }
 
 var UserRef = firebase.database().ref('Usuario/')
 
 
 
-export class FirebaseFunctions {
-    static async recoverKey(callback){
-        await firebase.database().ref("APIkey").once("value",API =>{
+export default class FirebaseFunctions {
+    static async recoverKey(callback) {
+        await firebase.database().ref("APIkey").once("value", API => {
             var a = API.val()
             callback(a)
         });
-        
+
     }
 
-    static writeUser(CPF,Nome) {
+    static writeUser(CPF, Nome) {
         UserRef.ref(CPF).set({
             Nome: Nome
         })
     }
 
-    static writeComment(IdPDI,Ratting,Body,CPFUser = "CPFPlaceholder"){
-        firebase.database().ref("CommentPDI/" + IdPDI).push({ 
+    static writeComment(IdPDI, Ratting, Body, CPFUser = "CPFPlaceholder") {
+        firebase.database().ref("CommentPDI/" + IdPDI).push({
             Avaliação: Ratting,
             CPFUsuario: CPFUser,
             Corpo: Body
-        }) 
-        
+        })
+
     }
 
-    static returnComments(IdPDI, callback){
-        firebase.database().ref("CommentPDI/" + IdPDI).on("value", listComment=>{
+    static returnComments(IdPDI, callback) {
+        firebase.database().ref("CommentPDI/" + IdPDI).on("value", listComment => {
             var lista = []
             listComment.forEach(element => {
                 let comment = element.val()
@@ -56,71 +57,62 @@ export class FirebaseFunctions {
             callback(lista)
         })
     }
-    static deleteComment(IdPDI,IdComment){
+    static deleteComment(IdPDI, IdComment) {
         firebase.database().ref("CommentPDI/" + IdPDI + IdComment).remove()
     }
 
-    static editComment(IdPDI,IdComment,Ratting,Body, CPFUser = "CPFPlaceholder"){
-        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).set({ 
+    static editComment(IdPDI, IdComment, Ratting, Body, CPFUser = "CPFPlaceholder") {
+        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).set({
             Avaliação: Ratting,
             CPFUsuario: CPFUser,
             Corpo: Body
         })
     }
-}
 
-const fbAuth = firebase.auth
-export class firebaseAuthFunctions {
-    static logIn(googleUser){
-        //var provider = new fbAuth.GoogleAuthProvider()
-        var credential = firebase.auth.GoogleAuthProvider.credential(
-            googleUser.idToken,
-            googleUser.accessToken
-          );
-          fbAuth().signInWithCredential(credential).then(function(result){
-              //
-          })
-    }
-    
     static logOut() {
-        fbAuth().signOut
+        firebase.auth().signOut
     }
 
-    static InitfirebaseAuth(callback){
-        fbAuth().onAuthStateChanged(function(user) {
+    static InitfirebaseAuth(callback) {
+        firebase.auth().onAuthStateChanged(function (user) {
             var name = ''
             var ProfilePicUrl = null
             var _logged = false
             var Uid = ''
-            if(user){
+            if (user) {
                 _logged = true
                 name = user.displayName
                 ProfilePicUrl = user.photoURL
                 Uid = user.uid
             }
-            callback({name, _logged, ProfilePicUrl, Uid})
+            callback({ name, _logged, ProfilePicUrl, Uid })
         })
     }
 
     static signInWithGoogleAsync = async () => {
-        console.log('aqui');
         try {
-          const result = await Google.logInAsync({
-            androidClientId: '527171682789-np1llqvpcogrreur0b9e7mlc1bgmoqap.apps.googleusercontent.com',
-            //behavior: 'web',
-            scopes: ['profile', 'email']
-          });
-    
-          if (result.type === 'success') {
-            this.logIn(result);
-            return result.accessToken;
-          } else {
-            return { cancelled: true };
-          }
+            console.log("Ele a morrendo aqui. Tem algum erro nesse pedido")
+            const googleUser = await Google.logInAsync({
+                androidClientId: '527171682789-np1llqvpcogrreur0b9e7mlc1bgmoqap.apps.googleusercontent.com',
+                scopes: ['profile', 'email']
+            });
+
+            console.log("Era pra googleUser.type ser sucesso. Mas não é")
+            if (googleUser.type === 'success') {
+                this.logIn(googleUser);
+                var credential = firebase.auth.GoogleAuthProvider.credential(
+                    googleUser.idToken,
+                    googleUser.accessToken
+                );
+                firebase.auth().signInWithCredential(credential)
+
+                return googleUser.accessToken;
+            } else {
+                return { cancelled: true };
+            }
         } catch (e) {
-          return { error: true };
+            console.log("Erro")
+            return { error: true };
         }
-      };
+    };
 }
-
-
