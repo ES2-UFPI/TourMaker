@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Modal } from 'react-native';
 
 
+import AsyncStorageFunctions from '../APIs/AsyncStorage';
+import DialogInput from 'react-native-dialog-input';
 import CustomTable from './ScreensModules/CustomTable';
 import CustomButton from './ScreensModules/CustomButton';
 import TableButton from './ScreensModules/TableButton';
@@ -28,7 +30,8 @@ class ControleRoteiroScreen extends Component {
         this.state = {
             listaPDI: listaOrdenada,
             tableHead: ["Parada", "Avaliação", 'Excluir', 'Detalhes'],//avaliação Maps
-            userlocation: props.route.params.userLocation
+            userlocation: props.route.params.userLocation,
+            isDialogVisible: false
         }
 
     }
@@ -93,6 +96,27 @@ class ControleRoteiroScreen extends Component {
         return (Math.sqrt(DLA * DLA + DLO * DLO))
     }
 
+    salvarRoteiro(Titulo){
+        ListaFavo= []
+        const rotaTitulo = {
+            rota: this.state.listaPDI,
+            titulo: Titulo
+        }
+        AsyncStorageFunctions.retrieveData("favoritos",(result)=>{
+            result= JSON.parse(result)
+            result = result == null? [] : result
+            result.push(rotaTitulo)
+            console.log(result)
+            console.log("------------------------------")
+            AsyncStorageFunctions.storeData(result, "favoritos")
+            this.setState({
+                isDialogVisible:false
+            })
+            alert("Roteiro Salvo")
+        })
+    }
+    
+
     render() {
         
         var tableData = []
@@ -115,6 +139,28 @@ class ControleRoteiroScreen extends Component {
                         tableData={tableData}
                     />
                 </View>
+                <View style={Styles.Container}>
+                    <DialogInput isDialogVisible={this.state.isDialogVisible}
+                        title={"Favorito"}
+                        message={"Salvar Roteiro Como"}
+                        hintInput={"Nome Roteiro"}
+                        submitInput={(inputText) => { this.salvarRoteiro(inputText) }}
+                        closeDialog={() => { this.setState({
+                            isDialogVisible:false
+                        }) }}
+                        submitText={"Salvar"}
+                        cancelText={"Cancelar"}>
+                    </DialogInput>
+                </View>
+                <CustomButton
+                    title="Salvar Roteiro"
+                    color={Styles.NavigationButtons.color}
+                    onPress={() => {  
+                        this.setState({
+                            isDialogVisible: true
+                        })
+                    }}
+                />
                 <CustomButton
                     title="Adicionar Parada"
                     color={Styles.NavigationButtons.color}
