@@ -12,7 +12,9 @@ import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
 import ControleRoteiroScreen from './Screens/ControleRoteiroScreen.js';
 import DetalhesPDIScreen from './Screens/DetalhesPDIScreen.js'
 
-
+import firebase from 'firebase';
+import { firebaseConfig } from './config'
+firebase.initializeApp(firebaseConfig);
 
 const Stack = createStackNavigator();
 
