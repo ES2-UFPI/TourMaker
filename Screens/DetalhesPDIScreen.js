@@ -6,6 +6,7 @@ import ReactMaps from '../APIs/ReactMaps';
 
 import StarRating from './ScreensModules/StarRating.js';
 import CustomTable from './ScreensModules/CustomTable';
+import TableButton from './ScreensModules/TableButton';
 
 import Styles from './Styles';
 
@@ -16,7 +17,36 @@ const Button = ({ index, functionCall, text }) => (
         </View>
     </TouchableOpacity>
 );
+const CreateComment = ({ sendAval, showAval, setState, setRating, state, updateAval }) => {
+    return (
+        <View style={{ margin: 10 }}>
+            <StarRating getRating={(result) => setRating(result)} actualRating={state.newRating - 1} />
+            <TextInput style={styles.txtInpt} value={state.newComment} editable numberOfLines={1} multiline={true} placeholder='Comentário(opcional)' onChangeText={(value) =>
+                setState({
+                    newComment: value
+                })
+            }></TextInput>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                {!state.editing ?
+                    <Button
+                        functionCall={sendAval}
+                        text="Enviar Avaliação"
+                    />
+                    :
+                    <Button
+                        functionCall={updateAval}
+                        text="Editar Avaliação"
+                    />
+                }
 
+                <Button
+                    functionCall={showAval}
+                    text="Cancelar Avaliação"
+                />
+            </View>
+        </View>
+    )
+}
 class DetalhesPDIScreen extends Component {
     constructor(props) {
         super(props)
@@ -25,13 +55,13 @@ class DetalhesPDIScreen extends Component {
             address: props.route.params.PDI.formatted_address.split(","),
             isOpen: props.route.params.PDI.opening_hours,
             gallery: null,
-            //isOpen : props.route.params.PDI.opening_hours.open_now === true ? "Aberto" : "Fechado",
-            tableHead: ["Nota", "Usuário", "Comentário"],
+            tableHead: ["Nota", "Usuário", "Comentários", "Funções"],
             id: props.route.params.PDI.placeId,
             avaliando: false,
             newRating: 1,
             newComment: "",
-            firebaseComments: []
+            firebaseComments: [],
+            editing: false
         }
         ReactMaps.getPhotoByReference(props.route.params.PDI.gallery, (result) => {
             this.setState({
@@ -42,7 +72,7 @@ class DetalhesPDIScreen extends Component {
         })
     }
 
-    componentDidMount(){
+    componentDidMount() {
         FirebaseFunctions.returnComments(this.state.id, (result) => {
             this.setState({
                 firebaseComments: result
@@ -51,7 +81,10 @@ class DetalhesPDIScreen extends Component {
     }
     showAval() {
         this.setState({
-            avaliando: !this.state.avaliando
+            avaliando: !this.state.avaliando,
+            editing: false,
+            newRating: 1,
+            newComment: "",
         })
     }
     setRating(value) {
@@ -71,6 +104,35 @@ class DetalhesPDIScreen extends Component {
             newComment: ''
         })
     }
+    deleteComment(key) {
+        FirebaseFunctions.deleteComment(this.state.id, key)
+    }
+    editComment(comment) {
+        if (!this.state.avaliando) {
+
+            this.showAval()
+        }
+        this.setState({
+            editing: true,
+            newComment: comment.Corpo,
+            newRating: comment.Avaliação,
+            commentKey: comment.key
+        })
+    }
+    updateAval() {
+        var id = this.state.id
+        var commentKey = this.state.commentKey
+        var newRating = this.state.newRating
+        var newComment = this.state.newComment
+        FirebaseFunctions.editComment(id, commentKey, newRating, newComment)
+        alert('Avaliação editada com sucesso!')
+        this.setState({
+            avaliando: !this.state.avaliando,
+            newRating: 1,
+            newComment: '',
+            editing: false
+        })
+    }
     render() {
         var conteudo = "Este local "
         if (this.state.isOpen != undefined) {
@@ -81,9 +143,17 @@ class DetalhesPDIScreen extends Component {
         }
 
         var tableData = []
-        this.state.firebaseComments.map(comment=>{
+        this.state.firebaseComments.map((comment, index) => {
             if (comment.Corpo !== '') {
-                tableData.push([comment.Avaliação, comment.CPFUsuario, comment.Corpo])
+                tableData.push([comment.Avaliação,
+                comment.CPFUsuario,
+                comment.Corpo,
+                (<View style={{ justifyContent: 'space-between', flexDirection: 'column', height: 43 }}>
+                    {TableButton(comment.key, this.deleteComment.bind(this), 'Excluir')}
+
+                    {TableButton(comment, this.editComment.bind(this), 'Editar')}
+                </View>),
+                ])
             }
         })
         return (
@@ -112,24 +182,14 @@ class DetalhesPDIScreen extends Component {
                         text="Avaliar"
                     />
                 ) : (
-                        <View style={{ margin: 10 }}>
-                            <StarRating getRating={(result) => this.setRating(result)} />
-                            <TextInput style={styles.txtInpt} editable numberOfLines={1} multiline={true} placeholder='Comentário(opcional)' onChangeText={(value) =>
-                                this.setState({
-                                    newComment: value
-                                })
-                            }></TextInput>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <Button
-                                    functionCall={this.sendAval.bind(this)}
-                                    text="Enviar Avaliação"
-                                />
-                                <Button
-                                    functionCall={this.showAval.bind(this)}
-                                    text="Cancelar Avaliação"
-                                />
-                            </View>
-                        </View>
+                        <CreateComment
+                            sendAval={this.sendAval.bind(this)}
+                            showAval={this.showAval.bind(this)}
+                            setState={this.setState.bind(this)}
+                            setRating={this.setRating.bind(this)}
+                            state={this.state}
+                            updateAval={this.updateAval.bind(this)}
+                        />
                     )}
                 <CustomTable
                     tableHead={this.state.tableHead}
@@ -144,7 +204,6 @@ class DetalhesPDIScreen extends Component {
 const styles = StyleSheet.create({
     btn: {
         backgroundColor: '#78B7BB',
-        borderRadius: 2,
         borderRadius: 10,
         marginTop: 10,
         marginBottom: 20,
