@@ -16,6 +16,7 @@ export default class AsyncStorageFunctions {
     static retrieveData = async(Chave, callback) => {
         try{
             await AsyncStorage.getItem(Chave).then((value) => {
+                value = JSON.parse(value)
                 callback(value)
             })
         }catch(e){
