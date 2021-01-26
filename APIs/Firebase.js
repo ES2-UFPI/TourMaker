@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/auth';
 
 
 const firebaseConfig = {
@@ -20,7 +21,7 @@ var UserRef = firebase.database().ref('Usuario/')
 
 
 
-export default class FirebaseFunctions {
+export class FirebaseFunctions {
     static async recoverKey(callback){
         await firebase.database().ref("APIkey").once("value",API =>{
             var a = API.val()
@@ -67,3 +68,59 @@ export default class FirebaseFunctions {
         })
     }
 }
+
+const fbAuth = firebase.auth
+export class firebaseAuthFunctions {
+    static logIn(googleUser){
+        //var provider = new fbAuth.GoogleAuthProvider()
+        var credential = firebase.auth.GoogleAuthProvider.credential(
+            googleUser.idToken,
+            googleUser.accessToken
+          );
+          fbAuth().signInWithCredential(credential).then(function(result){
+              //
+          })
+    }
+    
+    static logOut() {
+        fbAuth().signOut
+    }
+
+    static InitfirebaseAuth(callback){
+        fbAuth().onAuthStateChanged(function(user) {
+            var name = ''
+            var ProfilePicUrl = null
+            var _logged = false
+            var Uid = ''
+            if(user){
+                _logged = true
+                name = user.displayName
+                ProfilePicUrl = user.photoURL
+                Uid = user.uid
+            }
+            callback({name, _logged, ProfilePicUrl, Uid})
+        })
+    }
+
+    static signInWithGoogleAsync = async () => {
+        console.log('aqui');
+        try {
+          const result = await Google.logInAsync({
+            androidClientId: '527171682789-np1llqvpcogrreur0b9e7mlc1bgmoqap.apps.googleusercontent.com',
+            //behavior: 'web',
+            scopes: ['profile', 'email']
+          });
+    
+          if (result.type === 'success') {
+            this.logIn(result);
+            return result.accessToken;
+          } else {
+            return { cancelled: true };
+          }
+        } catch (e) {
+          return { error: true };
+        }
+      };
+}
+
+
