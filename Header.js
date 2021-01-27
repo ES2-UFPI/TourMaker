@@ -28,7 +28,6 @@ export default class CustomHeader extends Component {
         >Tour Maker</Text>
         {this.state._logged ? (
           <TouchableOpacity onPress={() => FirebaseFunctions.logOut()}>
-            {console.log(this.state.ProfilePicUrl)}
             <Image source={{uri:this.state.ProfilePicUrl}} style={styles.img}/>
           </TouchableOpacity>
         ) : (
