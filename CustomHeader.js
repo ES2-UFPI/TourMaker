@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
-import { View, Text, Button, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import FirebaseFunctions from './APIs/Firebase';
+
+var _mounted = true
 
 export default class CustomHeader extends Component {
   state = {
     ProfilePicUrl: null,
     Uid: "",
     _logged: false,
-    name: "awdawd",
+    name: "",
   }
 
   componentDidMount() {
-    FirebaseFunctions.InitfirebaseAuth(data => {
-      this.setState(data);
-    })
+    if(_mounted){
+      FirebaseFunctions.InitfirebaseAuth(data => {
+        this.setState(data);
+      })
+    }
+  }
+
+  componentWillUnmount(){
+    _mounted = false  
   }
 
   render() {
