@@ -1,0 +1,299 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <Image
+    source={null}
+    style={
+      Object {
+        "height": 200,
+        "marginTop": 5,
+        "width": 200,
+      }
+    }
+  />
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "alignSelf": "stretch",
+        "backgroundColor": "#c5fcf1",
+        "borderColor": "#1abc9c",
+        "borderRadius": 50,
+        "borderWidth": 1,
+        "margin": 5,
+        "padding": 10,
+      }
+    }
+  >
+    <Text>
+      
+    </Text>
+    <View
+      style={
+        Object {
+          "alignSelf": "stretch",
+          "flexDirection": "row",
+          "flexWrap": "wrap",
+          "justifyContent": "center",
+          "marginHorizontal": 20,
+        }
+      }
+    >
+      <Text>
+        
+      </Text>
+    </View>
+    <View
+      style={
+        Object {
+          "alignSelf": "stretch",
+          "flexDirection": "row",
+          "flexWrap": "wrap",
+          "justifyContent": "center",
+          "marginHorizontal": 20,
+        }
+      }
+    >
+      <Text>
+        Este
+         
+      </Text>
+      <Text>
+        local
+         
+      </Text>
+      <Text>
+        está
+         
+      </Text>
+      <Text>
+        Fechado
+         
+      </Text>
+    </View>
+  </View>
+  <View
+    accessible={true}
+    focusable={true}
+    onClick={[Function]}
+    onResponderGrant={[Function]}
+    onResponderMove={[Function]}
+    onResponderRelease={[Function]}
+    onResponderTerminate={[Function]}
+    onResponderTerminationRequest={[Function]}
+    onStartShouldSetResponder={[Function]}
+    style={
+      Object {
+        "opacity": 1,
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "backgroundColor": "#78B7BB",
+          "borderRadius": 10,
+          "marginBottom": 20,
+          "marginTop": 10,
+          "paddingHorizontal": 5,
+        }
+      }
+    >
+      <Text
+        style={
+          Object {
+            "color": "#fff",
+            "textAlign": "center",
+          }
+        }
+      >
+        Avaliar
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      Array [
+        undefined,
+        Object {
+          "borderBottomWidth": 0,
+          "borderColor": "transparent",
+          "borderLeftWidth": 0,
+        },
+      ]
+    }
+  >
+    <View
+      style={
+        Array [
+          undefined,
+          0,
+          Object {
+            "flexDirection": "row",
+            "overflow": "hidden",
+          },
+          Object {
+            "backgroundColor": "#1abc9d",
+            "width": 400,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Array [
+            Object {
+              "borderColor": "transparent",
+              "borderRightWidth": 0,
+              "borderTopWidth": 0,
+            },
+            Object {
+              "justifyContent": "center",
+            },
+            undefined,
+            undefined,
+            undefined,
+            Object {
+              "flex": 1,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "margin": 6,
+              },
+              Object {
+                "backgroundColor": "transparent",
+              },
+            ]
+          }
+        >
+          Nota
+        </Text>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "borderColor": "transparent",
+              "borderRightWidth": 0,
+              "borderTopWidth": 0,
+            },
+            Object {
+              "justifyContent": "center",
+            },
+            undefined,
+            undefined,
+            undefined,
+            Object {
+              "flex": 1,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "margin": 6,
+              },
+              Object {
+                "backgroundColor": "transparent",
+              },
+            ]
+          }
+        >
+          Usuário
+        </Text>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "borderColor": "transparent",
+              "borderRightWidth": 0,
+              "borderTopWidth": 0,
+            },
+            Object {
+              "justifyContent": "center",
+            },
+            undefined,
+            undefined,
+            undefined,
+            Object {
+              "flex": 1,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "margin": 6,
+              },
+              Object {
+                "backgroundColor": "transparent",
+              },
+            ]
+          }
+        >
+          Comentários
+        </Text>
+      </View>
+      <View
+        style={
+          Array [
+            Object {
+              "borderColor": "transparent",
+              "borderRightWidth": 0,
+              "borderTopWidth": 0,
+            },
+            Object {
+              "justifyContent": "center",
+            },
+            undefined,
+            undefined,
+            undefined,
+            Object {
+              "flex": 1,
+            },
+            undefined,
+          ]
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "margin": 6,
+              },
+              Object {
+                "backgroundColor": "transparent",
+              },
+            ]
+          }
+        >
+          Funções
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

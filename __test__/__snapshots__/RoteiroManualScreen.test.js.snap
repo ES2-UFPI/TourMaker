@@ -1,0 +1,437 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <Text>
+    Criar Novo Roteiro
+  </Text>
+  <Text>
+    Escolha pra Onde quer ir e Tenha a Melhor Rota
+  </Text>
+  <View
+    style={
+      Object {
+        "height": 50,
+        "width": 200,
+      }
+    }
+  >
+    <RNCPicker
+      items={
+        Array [
+          Object {
+            "label": "Tipo",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": undefined,
+          },
+          Object {
+            "label": "Alimentação",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Alimentação",
+          },
+          Object {
+            "label": "Compras",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Compras",
+          },
+          Object {
+            "label": "Hospedagem",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Hospedagem",
+          },
+          Object {
+            "label": "Parque de Diversões",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Parque de Diversões",
+          },
+          Object {
+            "label": "Galeria de Arte",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Galeria de Arte",
+          },
+          Object {
+            "label": "Biblioteca",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Biblioteca",
+          },
+          Object {
+            "label": "Atração Turistica",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Atração Turistica",
+          },
+          Object {
+            "label": "Zoologico",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Zoologico",
+          },
+          Object {
+            "label": "Museu",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Museu",
+          },
+          Object {
+            "label": "Cinema",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Cinema",
+          },
+          Object {
+            "label": "Spa",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Spa",
+          },
+          Object {
+            "label": "Estádio",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Estádio",
+          },
+          Object {
+            "label": "Parque",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "Parque",
+          },
+        ]
+      }
+      onChange={[Function]}
+      selectedIndex={0}
+      style={
+        Array [
+          Object {
+            "height": 216,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "height": 50,
+        "width": 200,
+      }
+    }
+  >
+    <RNCPicker
+      items={
+        Array [
+          Object {
+            "label": "Selecione Locais",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": undefined,
+          },
+        ]
+      }
+      onChange={[Function]}
+      selectedIndex={0}
+      style={
+        Array [
+          Object {
+            "height": 216,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "yellow",
+        "height": 200,
+        "justifyContent": "flex-start",
+        "width": "100%",
+      }
+    }
+  >
+    <AIRMap
+      followsUserLocation={false}
+      handlePanDrag={false}
+      initialRegion={null}
+      onChange={[Function]}
+      onLayout={[Function]}
+      onMapReady={[Function]}
+      onMarkerPress={[Function]}
+      onRegionChangeComplete={[Function]}
+      onUserLocationChange={[Function]}
+      region={null}
+      showsUserLocation={false}
+      style={
+        Object {
+          "height": "100%",
+          "width": "100%",
+        }
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "flex": 1,
+        "padding": 16,
+        "paddingTop": 30,
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          undefined,
+          Object {
+            "borderBottomWidth": 0,
+            "borderColor": "transparent",
+            "borderLeftWidth": 0,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Array [
+            undefined,
+            0,
+            Object {
+              "flexDirection": "row",
+              "overflow": "hidden",
+            },
+            Object {
+              "backgroundColor": "#1abc9d",
+              "width": 400,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Parada
+          </Text>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Avaliação
+          </Text>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Excluir
+          </Text>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Detalhes
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      Object {
+        "flexDirection": "row",
+      }
+    }
+  >
+    <View
+      style={
+        Object {
+          "flex": 1,
+        }
+      }
+    >
+      <View
+        accessibilityRole="button"
+        accessibilityState={Object {}}
+        accessible={true}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          Object {
+            "opacity": 1,
+          }
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {},
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "color": "#007AFF",
+                  "fontSize": 18,
+                  "margin": 8,
+                  "textAlign": "center",
+                },
+                Object {
+                  "color": "#1abc9c",
+                },
+              ]
+            }
+          >
+            Criar Roteiro
+          </Text>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

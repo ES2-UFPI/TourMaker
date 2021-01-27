@@ -5,7 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { StatusBar } from 'react-native';
 
-import CustomHeader from './Header.js';
+import CustomHeader from './CustomHeader.js';
 import HomeScreen from './Screens/HomeScreen.js';
 import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
 import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';

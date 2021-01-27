@@ -28,6 +28,14 @@ class HomeScreen extends Component {
                         this.props.navigation.push('RoteiroManual', {})
                     }}
                 />
+                <CustomButton
+                    title="Roteiros Salvos"
+                    color={Styles.NavigationButtons.color}
+                    onPress={() => {
+                        console.log("Ok")
+                        {/* this.props.navigation.push('RoteiroManual', {}) */}
+                    }}
+                />
             </View>
         )
     }
