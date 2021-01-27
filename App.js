@@ -12,8 +12,6 @@ import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
 import ControleRoteiroScreen from './Screens/ControleRoteiroScreen.js';
 import DetalhesPDIScreen from './Screens/DetalhesPDIScreen.js'
 
-
-
 const Stack = createStackNavigator();
 
 const StackOptionDefault = ({ navigation, route })=> ({
