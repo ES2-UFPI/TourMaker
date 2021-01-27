@@ -97,7 +97,6 @@ export default class FirebaseFunctions {
             });
 
             if (googleUser.type === 'success') {
-                console.log("teste")
                 var credential = firebase.auth.GoogleAuthProvider.credential(
                     googleUser.idToken,
                     googleUser.accessToken
