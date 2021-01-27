@@ -70,7 +70,7 @@ export default class FirebaseFunctions {
     }
 
     static logOut() {
-        firebase.auth().signOut
+        firebase.auth().signOut()
     }
 
     static InitfirebaseAuth(callback) {
@@ -91,15 +91,13 @@ export default class FirebaseFunctions {
 
     static signInWithGoogleAsync = async () => {
         try {
-            console.log("Ele a morrendo aqui. Tem algum erro nesse pedido")
             const googleUser = await Google.logInAsync({
                 androidClientId: '527171682789-np1llqvpcogrreur0b9e7mlc1bgmoqap.apps.googleusercontent.com',
                 scopes: ['profile', 'email']
             });
 
-            console.log("Era pra googleUser.type ser sucesso. Mas não é")
             if (googleUser.type === 'success') {
-                this.logIn(googleUser);
+                console.log("teste")
                 var credential = firebase.auth.GoogleAuthProvider.credential(
                     googleUser.idToken,
                     googleUser.accessToken
