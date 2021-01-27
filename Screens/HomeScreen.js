@@ -7,6 +7,7 @@ import CustomButton from './ScreensModules/CustomButton';
 import Styles from './Styles';
 
 class HomeScreen extends Component {
+
     render() {
         return (
             <View style={Styles.Screen}>
