@@ -12,12 +12,13 @@ import Styles from './Styles';
 
 function HookComponents({ navigation, route, setState, criaçãoRoteiro }) {
     React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            criaçãoRoteiro()
-            setState(route.params.listaPDI)
-        });
-
-        return unsubscribe;
+        if(navigation !== undefined){
+            const unsubscribe = navigation.addListener('focus', () => {
+                criaçãoRoteiro()
+                setState(route.params.listaPDI)
+            });
+            return unsubscribe;
+        }
     }, [navigation]);
 
     return null;

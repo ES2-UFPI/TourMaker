@@ -452,6 +452,66 @@ exports[`renders correctly 1`] = `
                           </View>
                         </View>
                       </View>
+                      <View
+                        style={
+                          Object {
+                            "flexDirection": "row",
+                          }
+                        }
+                      >
+                        <View
+                          style={
+                            Object {
+                              "flex": 1,
+                            }
+                          }
+                        >
+                          <View
+                            accessibilityRole="button"
+                            accessibilityState={Object {}}
+                            accessible={true}
+                            focusable={true}
+                            onClick={[Function]}
+                            onResponderGrant={[Function]}
+                            onResponderMove={[Function]}
+                            onResponderRelease={[Function]}
+                            onResponderTerminate={[Function]}
+                            onResponderTerminationRequest={[Function]}
+                            onStartShouldSetResponder={[Function]}
+                            style={
+                              Object {
+                                "opacity": 1,
+                              }
+                            }
+                          >
+                            <View
+                              style={
+                                Array [
+                                  Object {},
+                                ]
+                              }
+                            >
+                              <Text
+                                style={
+                                  Array [
+                                    Object {
+                                      "color": "#007AFF",
+                                      "fontSize": 18,
+                                      "margin": 8,
+                                      "textAlign": "center",
+                                    },
+                                    Object {
+                                      "color": "#1abc9c",
+                                    },
+                                  ]
+                                }
+                              >
+                                Roteiros Salvos
+                              </Text>
+                            </View>
+                          </View>
+                        </View>
+                      </View>
                     </View>
                   </View>
                 </View>
