@@ -9,7 +9,7 @@ import CustomTable from './ScreensModules/CustomTable';
 import TableButton from './ScreensModules/TableButton';
 
 import Styles from './Styles';
-
+var _mounted = true
 const Button = ({ index, functionCall, text }) => (
     <TouchableOpacity onPress={() => { functionCall(index) }}>
         <View style={styles.btn}>
@@ -61,7 +61,9 @@ class DetalhesPDIScreen extends Component {
             newRating: 1,
             newComment: "",
             firebaseComments: [],
-            editing: false
+            editing: false,
+            usuario: null,
+            jaComentou: false,
         }
         ReactMaps.getPhotoByReference(props.route.params.PDI.gallery, (result) => {
             this.setState({
@@ -73,11 +75,38 @@ class DetalhesPDIScreen extends Component {
     }
 
     componentDidMount() {
-        FirebaseFunctions.returnComments(this.state.id, (result) => {
-            this.setState({
-                firebaseComments: result
+        if (_mounted) {
+            FirebaseFunctions.InitfirebaseAuth(data => {
+                if (data._logged) {
+                    this.setState({
+                        usuario: {
+                            nome: data.name,
+                            id: data.Uid
+                        }
+                    });
+                } else {
+                    this.setState({
+                        usuario: null
+                    })
+                }
+
             })
-        })
+
+            FirebaseFunctions.returnComments(this.state.id, (result) => {
+                this.setState({
+                    firebaseComments: result
+                })
+            })
+        }
+        
+
+    }
+    componentWillUnmount() {
+        _mounted = false
+    }
+    componentDidUpdate() {
+        
+        
     }
     showAval() {
         this.setState({
@@ -96,7 +125,8 @@ class DetalhesPDIScreen extends Component {
         var id = this.state.id
         var newRating = this.state.newRating !== null ? this.state.newRating : 1
         var newComment = this.state.newComment
-        FirebaseFunctions.writeComment(id, newRating, newComment)
+        var user = this.state.usuario
+        FirebaseFunctions.writeComment(id, newRating, newComment, user)
         alert('Avaliação enviada com sucesso!')
         this.setState({
             avaliando: !this.state.avaliando,
@@ -124,7 +154,8 @@ class DetalhesPDIScreen extends Component {
         var commentKey = this.state.commentKey
         var newRating = this.state.newRating
         var newComment = this.state.newComment
-        FirebaseFunctions.editComment(id, commentKey, newRating, newComment)
+        var user = this.state.usuario
+        FirebaseFunctions.editComment(id, commentKey, newRating, newComment, user)
         alert('Avaliação editada com sucesso!')
         this.setState({
             avaliando: !this.state.avaliando,
@@ -134,6 +165,18 @@ class DetalhesPDIScreen extends Component {
         })
     }
     render() {
+        var user = this.state.usuario
+        var comments = this.state.firebaseComments
+        var jaComentou = false
+        var idUserComment = -1
+        for (var i in comments){
+            if (user != null && comments[i].CPFUsuario.id === user.id){
+                jaComentou = true
+                idUserComment = i
+                break
+            }
+        }
+
         var conteudo = "Este local "
         if (this.state.isOpen != undefined) {
             conteudo += "está " + (this.state.isOpen.open_now ? "Aberto" : "Fechado")
@@ -145,17 +188,25 @@ class DetalhesPDIScreen extends Component {
         var tableData = []
         this.state.firebaseComments.map((comment, index) => {
             if (comment.Corpo !== '') {
-                tableData.push([comment.Avaliação,
-                comment.CPFUsuario,
-                comment.Corpo,
-                (<View style={{ justifyContent: 'space-between', flexDirection: 'column', height: 43 }}>
-                    {TableButton(comment.key, this.deleteComment.bind(this), 'Excluir')}
+                var element = user != null && comment.CPFUsuario.id == user.id ?
+                 (<View style={{ justifyContent: 'space-between', flexDirection: 'column', height: 43 }}>
+                {TableButton(comment.key, this.deleteComment.bind(this), 'Excluir')}
 
-                    {TableButton(comment, this.editComment.bind(this), 'Editar')}
-                </View>),
+                {TableButton(comment, this.editComment.bind(this), 'Editar')}
+                </View>) : ""
+                tableData.push([comment.Avaliação,
+                comment.CPFUsuario.nome,
+                comment.Corpo,
+                element,
                 ])
             }
         })
+
+        if (idUserComment != -1){
+            var aux = tableData[0]
+            tableData[0] = tableData[i]
+            tableData[i] = aux
+        }
         return (
             <View style={Styles.Screen}>
                 <Image source={this.state.gallery} style={styles.img} />
@@ -176,12 +227,13 @@ class DetalhesPDIScreen extends Component {
                         }
                     </View>
                 </View>
-                {!this.state.avaliando ? (
-                    <Button
-                        functionCall={this.showAval.bind(this)}
-                        text="Avaliar"
-                    />
-                ) : (
+                {!this.state.avaliando ?
+                    this.state.usuario != null && !jaComentou?
+                        <Button
+                            functionCall={this.showAval.bind(this)}
+                            text="Avaliar"
+                        /> : null
+                    : 
                         <CreateComment
                             sendAval={this.sendAval.bind(this)}
                             showAval={this.showAval.bind(this)}
@@ -190,7 +242,7 @@ class DetalhesPDIScreen extends Component {
                             state={this.state}
                             updateAval={this.updateAval.bind(this)}
                         />
-                    )}
+                    }
                 <CustomTable
                     tableHead={this.state.tableHead}
                     tableData={tableData}
