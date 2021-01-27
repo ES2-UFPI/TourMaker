@@ -56,11 +56,11 @@ export default class FirebaseFunctions {
         })
     }
     static deleteComment(IdPDI,IdComment){
-        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).remove()
+        firebase.database().ref("CommentPDI/" + IdPDI +'/'+ IdComment).remove()
     }
 
     static editComment(IdPDI,IdComment,Ratting,Body, CPFUser = "CPFPlaceholder"){
-        firebase.database().ref("CommentPDI/" + IdPDI + IdComment).set({ 
+        firebase.database().ref("CommentPDI/" + IdPDI +'/' +  IdComment).set({ 
             Avaliação: Ratting,
             CPFUsuario: CPFUser,
             Corpo: Body
