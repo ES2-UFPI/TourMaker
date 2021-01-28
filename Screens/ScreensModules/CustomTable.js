@@ -1,16 +1,20 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Table, Row } from 'react-native-table-component';
+import { StyleSheet, ScrollView} from 'react-native';
+import { Table, Row} from 'react-native-table-component';
 
 
 const CustomTable = ({ tableHead, tableData }) => {
     return (
-        <Table borderStyle={{ borderColor: 'transparent' }}>
-            <Row data={tableHead} style={styles.head} textStyle={styles.text} />
-            {tableData.map((rowData, index) => (
-                <Row key={index} data={rowData} style={styles.row} textStyle={styles.text} />
-            ))}
-        </Table>
+            <Table borderStyle={{ borderColor: 'transparent' }}>
+                
+                <Row data={tableHead} style={styles.head} textStyle={styles.text} />
+                <ScrollView>
+                {tableData.map((rowData, index) => (
+                    <Row key={index} data={rowData} style={styles.row} textStyle={styles.text} />
+                ))}
+                </ScrollView>
+            </Table>
+        
     )
 }
 
