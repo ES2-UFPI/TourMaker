@@ -11,6 +11,7 @@ import RoteiroAutomaticoScreen from './Screens/RoteiroAutomaticoScreen.js';
 import RoteiroManualScreen from './Screens/RoteiroManualScreen.js';
 import ControleRoteiroScreen from './Screens/ControleRoteiroScreen.js';
 import DetalhesPDIScreen from './Screens/DetalhesPDIScreen.js'
+import SavedScreen from './Screens/SavedScreen.js';
 
 const Stack = createStackNavigator();
 
@@ -48,6 +49,11 @@ function App() {
         <Stack.Screen
           name="DetalhesPDI"
           component={DetalhesPDIScreen}
+          options={StackOptionDefault}
+        />
+        <Stack.Screen
+          name="SavedRoutes"
+          component={SavedScreen}
           options={StackOptionDefault}
         />
       </Stack.Navigator>
