@@ -65,6 +65,7 @@ class DetalhesPDIScreen extends Component {
             usuario: null,
             jaComentou: false,
         }
+        _mounted = true,
         ReactMaps.getPhotoByReference(props.route.params.PDI.gallery, (result) => {
             this.setState({
                 gallery: {
