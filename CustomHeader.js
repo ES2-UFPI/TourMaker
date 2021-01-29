@@ -2,14 +2,18 @@ import React, { Component } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import FirebaseFunctions from './APIs/Firebase';
 
-var _mounted = true
+var _mounted
 
 export default class CustomHeader extends Component {
-  state = {
-    ProfilePicUrl: null,
-    Uid: "",
-    _logged: false,
-    name: "",
+  constructor(props){
+    super(props)
+    _mounted = true
+    this.state = {
+      ProfilePicUrl: null,
+      Uid: "",
+      _logged: false,
+      name: "",
+    }
   }
 
   componentDidMount() {
@@ -19,6 +23,7 @@ export default class CustomHeader extends Component {
       })
     }
   }
+
 
   componentWillUnmount(){
     _mounted = false  
