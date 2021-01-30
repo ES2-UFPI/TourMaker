@@ -98,13 +98,11 @@ class ControleRoteiroScreen extends Component {
     }
 
     salvarRoteiro(Titulo){
-        ListaFavo= []
         const rotaTitulo = {
             rota: this.state.listaPDI,
             titulo: Titulo
         }
         AsyncStorageFunctions.retrieveData("favoritos",(result)=>{
-            result= JSON.parse(result)
             result = result == null? [] : result
             result.push(rotaTitulo)
             console.log(result)
