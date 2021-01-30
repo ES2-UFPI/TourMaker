@@ -197,6 +197,9 @@ exports[`renders correctly 1`] = `
           </Text>
         </View>
       </View>
+      <RCTScrollView>
+        <View />
+      </RCTScrollView>
     </View>
   </View>
   <View

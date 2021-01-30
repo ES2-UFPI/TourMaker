@@ -1,0 +1,165 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<View
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#fff",
+      "flex": 1,
+      "justifyContent": "flex-start",
+    }
+  }
+>
+  <Text>
+    Gereciamento de Roteiro
+  </Text>
+  <View
+    style={
+      Object {
+        "backgroundColor": "#fff",
+        "flex": 1,
+        "padding": 16,
+        "paddingTop": 30,
+      }
+    }
+  >
+    <View
+      style={
+        Array [
+          undefined,
+          Object {
+            "borderBottomWidth": 0,
+            "borderColor": "transparent",
+            "borderLeftWidth": 0,
+          },
+        ]
+      }
+    >
+      <View
+        style={
+          Array [
+            undefined,
+            0,
+            Object {
+              "flexDirection": "row",
+              "overflow": "hidden",
+            },
+            Object {
+              "backgroundColor": "#1abc9d",
+              "width": 400,
+            },
+          ]
+        }
+      >
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Titulo
+          </Text>
+        </View>
+        <View
+          style={
+            Array [
+              Object {
+                "borderColor": "transparent",
+                "borderRightWidth": 0,
+                "borderTopWidth": 0,
+              },
+              Object {
+                "justifyContent": "center",
+              },
+              undefined,
+              undefined,
+              undefined,
+              Object {
+                "flex": 1,
+              },
+              undefined,
+            ]
+          }
+        >
+          <Text
+            style={
+              Array [
+                Object {
+                  "margin": 6,
+                },
+                Object {
+                  "backgroundColor": "transparent",
+                },
+              ]
+            }
+          >
+            Opções
+          </Text>
+        </View>
+      </View>
+      <RCTScrollView>
+        <View />
+      </RCTScrollView>
+    </View>
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "backgroundColor": "yellow",
+          "height": 0,
+          "justifyContent": "flex-start",
+          "width": "100%",
+        }
+      }
+    >
+      <AIRMap
+        followsUserLocation={false}
+        handlePanDrag={false}
+        initialRegion={null}
+        onChange={[Function]}
+        onLayout={[Function]}
+        onMapReady={[Function]}
+        onMarkerPress={[Function]}
+        onRegionChangeComplete={[Function]}
+        onUserLocationChange={[Function]}
+        region={null}
+        showsUserLocation={false}
+        style={
+          Object {
+            "height": "100%",
+            "width": "100%",
+          }
+        }
+      />
+    </View>
+  </View>
+</View>
+`;

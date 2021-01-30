@@ -5,7 +5,7 @@ import ControleRoteiroScreen from '../Screens/ControleRoteiroScreen';
 
 it('renders correctly', () => {
     const tree = renderer.create(<ControleRoteiroScreen route={{
-        params:{
+        params: {
             listaPDI: []
         }
     }} />).toJSON();

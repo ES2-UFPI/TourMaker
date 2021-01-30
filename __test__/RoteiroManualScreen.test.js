@@ -5,6 +5,6 @@ import RoteiroManualScreen from '../Screens/RoteiroManualScreen';
 
 
 it('renders correctly', () => {
-    const tree = renderer.create(<RoteiroManualScreen route={{params:{}}}/>).toJSON();
+    const tree = renderer.create(<RoteiroManualScreen route={{ params: {} }} />).toJSON();
     expect(tree).toMatchSnapshot();
 });

@@ -83,45 +83,6 @@ exports[`renders correctly 1`] = `
     </View>
   </View>
   <View
-    accessible={true}
-    focusable={true}
-    onClick={[Function]}
-    onResponderGrant={[Function]}
-    onResponderMove={[Function]}
-    onResponderRelease={[Function]}
-    onResponderTerminate={[Function]}
-    onResponderTerminationRequest={[Function]}
-    onStartShouldSetResponder={[Function]}
-    style={
-      Object {
-        "opacity": 1,
-      }
-    }
-  >
-    <View
-      style={
-        Object {
-          "backgroundColor": "#78B7BB",
-          "borderRadius": 10,
-          "marginBottom": 20,
-          "marginTop": 10,
-          "paddingHorizontal": 5,
-        }
-      }
-    >
-      <Text
-        style={
-          Object {
-            "color": "#fff",
-            "textAlign": "center",
-          }
-        }
-      >
-        Avaliar
-      </Text>
-    </View>
-  </View>
-  <View
     style={
       Array [
         undefined,
@@ -294,6 +255,9 @@ exports[`renders correctly 1`] = `
         </Text>
       </View>
     </View>
+    <RCTScrollView>
+      <View />
+    </RCTScrollView>
   </View>
 </View>
 `;
