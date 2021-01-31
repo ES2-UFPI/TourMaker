@@ -312,6 +312,45 @@ exports[`renders correctly 1`] = `
   <View
     style={
       Object {
+        "alignItems": "center",
+        "height": 50,
+        "justifyContent": "center",
+        "width": 200,
+      }
+    }
+  >
+    <RNCPicker
+      items={
+        Array [
+          Object {
+            "label": "Distância",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "distância",
+          },
+          Object {
+            "label": "Avaliação",
+            "testID": undefined,
+            "textColor": undefined,
+            "value": "avaliação",
+          },
+        ]
+      }
+      onChange={[Function]}
+      selectedIndex={0}
+      style={
+        Array [
+          Object {
+            "height": 216,
+          },
+          undefined,
+        ]
+      }
+    />
+  </View>
+  <View
+    style={
+      Object {
         "flexDirection": "row",
       }
     }
