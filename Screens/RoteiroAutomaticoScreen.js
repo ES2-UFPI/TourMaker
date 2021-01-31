@@ -20,6 +20,25 @@ import Styles from './Styles';
         paramsRoteiroManual
 */
 
+function distância (resultListaTipos, result, quant) {
+    var b = result.filter((_, index) => { return index < quant })
+        b.forEach(element => {
+            resultListaTipos.push(element)
+        });
+    return resultListaTipos;
+}
+
+function avaliação (resultListaTipos, result, quant) {
+    result = result.sort((a,b) => {
+        return b.rating - a.rating;
+    })
+    var b = result.filter((_, index) => { return index < quant })
+        b.forEach(element => {
+            resultListaTipos.push(element)
+        });
+    return resultListaTipos;
+}
+
 class RoteiroAutomaticoScreen extends Component {
 
     constructor(props) {
@@ -32,7 +51,11 @@ class RoteiroAutomaticoScreen extends Component {
             userLocation: null,
             listaTipos: [],
             flags: [],
-            resultListaTipos: []
+            resultListaTipos: [],
+            modo: {
+                label: "Distância",
+                value: distância,
+            }
         };
     }
 
@@ -82,30 +105,7 @@ class RoteiroAutomaticoScreen extends Component {
         }
         ReactMaps.getLocationByType(a, (result) => {
             var resultListaTipos = this.state.resultListaTipos[indexResult]
-            if (resultListaTipos.length == 0) {
-                var b = result.filter((_, index) => { return index < item.quant })
-                b.forEach(element => {
-                    resultListaTipos.push(element)
-                });
-            }
-            else {
-                var i
-                for (i = 0; i < item.quant; i++) {
-                    var menorDistancia = this.calculoLocalizacao(resultListaTipos[resultListaTipos.length - 1].coordinate, result[0].coordinate)
-                    var menorIndex = 0
-                    result.forEach((element, index) => {
-                        var a = this.calculoLocalizacao(resultListaTipos[resultListaTipos.length - 1].coordinate, element.coordinate)
-                        if (menorDistancia > a) {
-                            menorDistancia = a
-                            menorIndex = index
-                        }
-                    });
-                    resultListaTipos.push(result[menorIndex])
-                    result = result.filter((_, index) => {
-                        return index != menorIndex
-                    })
-                }
-            }
+            resultListaTipos = this.state.modo.value(resultListaTipos, result,item.quant)
             var flags = this.state.flags
             flags[indexResult] = true
             var PDIs = this.state.resultListaTipos
@@ -134,28 +134,6 @@ class RoteiroAutomaticoScreen extends Component {
         this.setState({
             listaTipos: a
         })
-    }
-
-    calculoLocalizacao(ponto1, ponto2) {
-        var DLA = ponto1.latitude - ponto2.latitude
-        DLA = DLA >= 0 ? DLA : -DLA
-        DLA = {
-            grau: parseInt(DLA),
-            minuto: parseInt((DLA - parseInt(DLA)) * 60),
-            segundo: (((DLA - parseInt(DLA)) * 60) - parseInt((DLA - parseInt(DLA)) * 60)) * 60
-        }
-        DLA = (DLA.grau * 60 + DLA.minuto + DLA.segundo / 60) * 1.852
-
-
-        var DLO = ponto1.longitude - ponto2.longitude
-        DLO = DLO >= 0 ? DLO : -DLO
-        DLO = {
-            grau: parseInt(DLO),
-            minuto: parseInt((DLO - parseInt(DLO)) * 60),
-            segundo: (((DLO - parseInt(DLO)) * 60) - parseInt((DLO - parseInt(DLO)) * 60)) * 60
-        }
-        DLO = (DLO.grau * 60 + DLO.minuto + DLO.segundo / 60) * 1.852
-        return (Math.sqrt(DLA * DLA + DLO * DLO))
     }
 
     componentDidUpdate() {
@@ -227,6 +205,32 @@ class RoteiroAutomaticoScreen extends Component {
                         tableData={tableData}
                     />
                 </View>
+
+                <Picker
+                    selectedValue={this.state.modo.label}
+                    style={{ height: 50, width: 200, justifyContent: "center", alignItems: "center"}}
+                    onValueChange={(itemValue) => {
+                        var modo;
+                        switch (itemValue) {
+                            case "distância":
+                                modo = {
+                                    label: "distância",
+                                    value: distância,
+                                }
+                                break;
+                            case "avaliação":
+                                modo = {
+                                    label: "avaliação",
+                                    value: avaliação,
+                                }
+                                break;
+                        }
+                        this.setState({ modo })
+                    }
+                    }>
+                    <Picker.Item label="Distância" value="distância"/>
+                    <Picker.Item label="Avaliação" value="avaliação"/>
+                </Picker>
 
                 <CustomButton
                     title="Criar Roteiro Automático"
